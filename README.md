@@ -3,12 +3,9 @@ Chattie
 Simple Java application to deploy a simple chatting server easily using Java-rmi
 
 ##Instructions
-1. Compile running `make`
-2. Execute rmi registry `rmiregistry &`
-3. Execute chat launcher `bash launch_chat.sh`
-	* This will generate server.policy file and will execute chattie server (executing server_launcher.sh)
-4. Execute chat client `bash client_launcher.sh`
->Once server.policy is generated, server\_launcher.sh can be used instead of launch\_chat.sh to execute server (unless program location is changed)
+1. Run `make` to compile both, Chattie server and client
+2. To run server, execute `bash server_launcher.sh` on classes/server folder
+3. To run client, execute `bash client_launcher.sh` on classes/client folder
 
 _Currentlly only local connection from client to server functionalities are working_
 
