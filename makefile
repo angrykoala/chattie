@@ -9,44 +9,54 @@ LINKER=jar
 SDIR=src
 CDIR=classes
 BDIR=bin
-CLIENTDIR=$(BDIR)/client
-SERVERDIR=$(BDIR)/server
-_DIRECTORIES=$(BDIR) $(CDIR) $(CLIENTDIR) $(SERVERDIR)
-DIRECTORIES=$(patsubst %,%/,$(_DIRECTORIES))
+CLIENTDIR=$(CDIR)/client
+SERVERDIR=$(CDIR)/server
 
 
 _CLIENT=ServerInterface.java ChatClient.java ClientInterface.java
-CLIENT_CLASS=$(patsubst %,$(CDIR)/%,$(_CLIENT:.java=.class))
-CLIENT_CLASS2=$(patsubst %,-C $(CDIR) %,$(_CLIENT:.java=.class))
+CLIENT_CLASS=$(patsubst %,$(CLIENTDIR)/%,$(_CLIENT:.java=.class))
+#CLIENT_CLASS2=$(patsubst %,-C $(CDIR) %,$(_CLIENT:.java=.class))
 _SERVER=ServerInterface.java ChatServer.java ClientInterface.java
-SERVER_CLASS=$(patsubst %,$(CDIR)/%,$(_SERVER:.java=.class))
-SERVER_CLASS2=$(patsubst %,-C $(CDIR) %,$(_SERVER:.java=.class))
-CLIENT_BIN=$(CLIENTDIR)/ChattyClient.jar
-SERVER_BIN=$(SERVERDIR)/ChattyServer.jar
+SERVER_CLASS=$(patsubst %,$(SERVERDIR)/%,$(_SERVER:.java=.class))
+#SERVER_CLASS2=$(patsubst %,-C $(CDIR) %,$(_SERVER:.java=.class))
+#CLIENT_BIN=$(CLIENTDIR)/ChattyClient.jar
+#SERVER_BIN=$(SERVERDIR)/ChattyServer.jar
 
 .PHONY: all
-all: $(DIRECTORIES) $(CLIENT_BIN) $(SERVER_BIN)
+all: client server
 
+.PHONY: client
+client: $(CLIENTDIR)/ $(CLIENT_CLASS) $(CLIENTDIR)/client_launcher.sh
 
-$(CLIENT_BIN): $(CLIENT_CLASS)
-	$(LINKER) cfe $@ ChatClient $(CLIENT_CLASS2)
+.PHONY: server
+server: $(SERVERDIR)/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
+#$(CLIENT_BIN): $(CLIENT_CLASS)
+#	$(LINKER) cfe $@ ChatClient $(CLIENT_CLASS2)
 	
-$(SERVER_BIN): $(SERVER_CLASS)
-	$(LINKER) cfe $@ ChatServer $(SERVER_CLASS2)
+#$(SERVER_BIN): $(SERVER_CLASS)
+#	$(LINKER) cfe $@ ChatServer $(SERVER_CLASS2)
 
 #compile class
-$(CDIR)/%.class: $(SDIR)/%.java
-	$(COMPILER) -d $(CDIR) $^ -sourcepath $(SDIR)
+$(SERVERDIR)/%.class: $(SDIR)/%.java
+	$(COMPILER) -d $(SERVERDIR) $^ -sourcepath $(SDIR)
+$(CLIENTDIR)/%.class: $(SDIR)/%.java
+	$(COMPILER) -d $(CLIENTDIR) $^ -sourcepath $(SDIR)
+classes/client/%.sh: launchers/%.sh
+	cp $< $@
+classes/server/%.sh: launchers/%.sh
+	cp $< $@
+	
 
 %/:
-	mkdir $@
+	mkdir -p $@
 
 
 
 .PHONY: astyle
 astyle:
 	astyle --style=java --break-closing-brackets --align-pointer=name --delete-empty-lines --indent-col1-comments --unpad-paren -n -Q $(SDIR)/*.java
-.PHONY: clear
+.PHONY: clean
 clean:
-	rm -r -f  $(CDIR) $(BDIR) *~ $(SDIR)/*~ *.class *.jar
-
+	rm -r -f  $(CDIR) *~ $(SDIR)/*~ *.class *.jar
+.PHONY: print-%
+print-%  : ; @echo $* = $($*)

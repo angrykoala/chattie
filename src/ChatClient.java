@@ -22,16 +22,16 @@ public class ChatClient implements ClientInterface {
         try {
             registry = LocateRegistry.getRegistry(args[0]);
             ServerInterface server = (ServerInterface) registry.lookup(serverName);
-            ChatClient client=new ChatClient("pepe");
+            //ChatClient client=new ChatClient("Ford");
             //Registry registry=LocateRegistry.getRegistry();
             //ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) client,0);
             //registry.rebind(client.name, stub);
             //ClientInterface clientstub=(ClientInterface)registry.lookup(client.name);
             server.sendMessage("test","bien");
-            if(server.login("pepe")) System.out.println("Registrado con exito");
+            if(server.login("Ford")) System.out.println("Registrado con exito");
             else System.out.println("problema en registro");
-            server.sendMessage("test2","muy bien");
-            server.disconnect("pepe");
+            server.sendMessage("Ford","Bring your Towel");
+            server.disconnect("Ford");
             /* if(server.login(client.name,clientstub)==false) System.out.println("Login Fail");
              else{
               System.out.println("Login Success");

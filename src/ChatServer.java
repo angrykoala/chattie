@@ -11,6 +11,7 @@ public class ChatServer implements ServerInterface {
     public ChatServer(String serverName) {
         super();
         try {
+            LocateRegistry.createRegistry(1099);
             this.registry=LocateRegistry.getRegistry();
             bindServer(serverName);
         }
@@ -62,6 +63,9 @@ public class ChatServer implements ServerInterface {
         ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) this,0);
         registry.rebind(serverName, stub);
     }
+
+
+
     public static void main(String[] args) {
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());

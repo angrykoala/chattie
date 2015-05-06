@@ -3,7 +3,7 @@ Chattie
 Simple Java application to deploy a simple chatting server easily using Java-rmi
 
 ##Instructions
-1. Compile all Java files with `javac *.java`
+1. Compile running `make`
 2. Execute rmi registry `rmiregistry &`
 3. Execute chat launcher `bash launch_chat.sh`
 	* This will generate server.policy file and will execute chattie server (executing server_launcher.sh)
