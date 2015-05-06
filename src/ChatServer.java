@@ -33,9 +33,8 @@ public class ChatServer implements ServerInterface {
     }
 
     @Override
-    public void sendMessage(String username, String mensaje)
-    throws RemoteException {
-        System.out.println("Mensaje de "+username+": "+mensaje);
+    public void sendMessage(String username, String mensaje) throws RemoteException {
+    	 if(users.contains(username)) System.out.println("Mensaje de "+username+": "+mensaje);
         /*	for(String user : users){
         				try{
         					System.out.println(user);
@@ -53,12 +52,6 @@ public class ChatServer implements ServerInterface {
         System.out.println(username+" se desconecto");
     }
 
-
-    /**
-     * @param args
-     * @throws RemoteException
-     */
-
     private void bindServer(String serverName) throws RemoteException {
         ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) this,0);
         registry.rebind(serverName, stub);
@@ -70,7 +63,7 @@ public class ChatServer implements ServerInterface {
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
-        new ChatServer("ChatServer");//ServerInterface serverInterface=
+        new ChatServer("ChatServer");
         /*try {
         	serverInterface.bindServer(serverInterface,"ChatServer");
         } catch (RemoteException e) {
