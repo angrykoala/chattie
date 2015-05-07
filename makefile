@@ -26,10 +26,10 @@ SERVER_CLASS=$(patsubst %,$(SERVERDIR)/%,$(_SERVER:.java=.class))
 all: client server
 
 .PHONY: client
-client: $(CLIENTDIR)/ $(CLIENT_CLASS) $(CLIENTDIR)/client_launcher.sh
+client: $(CLIENTDIR)\/ $(CLIENT_CLASS) $(CLIENTDIR)/client_launcher.sh
 
 .PHONY: server
-server: $(SERVERDIR)/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
+server: $(SERVERDIR)\/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
 #$(CLIENT_BIN): $(CLIENT_CLASS)
 #	$(LINKER) cfe $@ ChatClient $(CLIENT_CLASS2)
 	

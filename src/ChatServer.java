@@ -13,7 +13,7 @@ public class ChatServer implements ServerInterface {
     public ChatServer(String serverName) {
         super();
         try {
-            //this.registry=LocateRegistry.createRegistry(1099);
+            //this.registry=LocateRegistry.createRegistry(1099); //to create registry
             this.registry=LocateRegistry.getRegistry();
             bindServer(serverName);
         }
