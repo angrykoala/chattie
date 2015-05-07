@@ -6,13 +6,14 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 public class ChatServer implements ServerInterface {
-    ArrayList<String> users=new ArrayList<String>();
-    //HashMap<String,ClientInterface> users=new ArrayList<String>();
-    Registry registry;
+    private ArrayList<String> users=new ArrayList<String>();
+    //private HashMap<String,ClientInterface> users=new ArrayList<String>();
+    private Registry registry;
+    private final String serverName="Chattie Server";
     public ChatServer(String serverName) {
         super();
         try {
-        	//this.registry=LocateRegistry.createRegistry(1099);
+            //this.registry=LocateRegistry.createRegistry(1099);
             this.registry=LocateRegistry.getRegistry();
             bindServer(serverName);
         }
@@ -25,10 +26,11 @@ public class ChatServer implements ServerInterface {
     public boolean login(String username,ClientInterface client) throws RemoteException {
         System.out.println("Registrar "+username);
         if(users.contains(username)) return false;
+        else if(username==serverName) return false;
         else {
             users.add(username);
             registry.rebind(username, client);
-            client.getMessage("server", "sending stub works!!!");
+            client.getMessage(serverMessage("Login Success"));
             //	ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) clientStub,0);
             //	registry.rebind(username, stub);
             return true;
@@ -36,32 +38,36 @@ public class ChatServer implements ServerInterface {
     }
 
     @Override
-    public void sendMessage(String username, String mensaje) throws RemoteException {
-    	 if(users.contains(username)) System.out.println("Mensaje de "+username+": "+mensaje);
-        	for(String user : users){
-        				try{
-        				ClientInterface client = (ClientInterface) registry.lookup(user);
-        				if(client!=null) client.getMessage(username,mensaje);
-        				} catch ( RemoteException | NotBoundException e) {
-        				e.printStackTrace();
-        			}
-        		}
+    public void sendMessage(ChatMessage message) throws RemoteException {
+        if(users.contains(message.getAuthor())) {
+            for(String user : users) {
+                try {
+                    ClientInterface client = (ClientInterface) registry.lookup(user);
+                    if(client!=null) client.getMessage(message);
+                }
+                catch(RemoteException | NotBoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     public void disconnect(String username) throws RemoteException, NotBoundException {
-    	ClientInterface client = (ClientInterface) registry.lookup(username);
-    	client.getMessage("server","you have been disconnected");
-    	registry.unbind(username);
+        ClientInterface client = (ClientInterface) registry.lookup(username);
+        client.getMessage(serverMessage("You have been logged out"));
+        registry.unbind(username);
         users.remove(username);
-        System.out.println(username+" se desconecto");
+        System.out.println(username+" log out");
     }
 
     private void bindServer(String serverName) throws RemoteException {
         ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) this,0);
         registry.rebind(serverName, stub);
     }
-
+    private ChatMessage serverMessage(String message) {
+        return new ChatMessage(this.serverName,message);
+    }
 
 
     public static void main(String[] args) {
@@ -69,22 +75,16 @@ public class ChatServer implements ServerInterface {
             System.setSecurityManager(new SecurityManager());
         }
         new ChatServer("ChatServer");
-        /*try {
-        	serverInterface.bindServer(serverInterface,"ChatServer");
-        } catch (RemoteException e) {
-        	e.printStackTrace();
-        }*/
     }
 
-	@Override
-	public ArrayList<String> getUsers() throws RemoteException {
-		return users;
-	}
+    @Override
+    public ArrayList<String> getUsers() throws RemoteException {
+        return users;
+    }
 
-	@Override
-	public boolean changeUsername(String oldUser, String newUser)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean changeUsername(String oldUser, String newUser)
+    throws RemoteException {
+        return false;
+    }
 }

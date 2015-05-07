@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public interface ServerInterface extends Remote {
     public boolean login(String username,ClientInterface stub) throws RemoteException;
     public boolean changeUsername(String oldUser,String newUser) throws RemoteException;
-    public void sendMessage(String username,String mensaje) throws RemoteException;
+    public void sendMessage(ChatMessage message) throws RemoteException;
     public void disconnect(String username) throws RemoteException, NotBoundException;
     public ArrayList<String> getUsers() throws RemoteException;
 }

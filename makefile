@@ -13,10 +13,10 @@ CLIENTDIR=$(CDIR)/client
 SERVERDIR=$(CDIR)/server
 
 
-_CLIENT=ServerInterface.java ChatClient.java ClientInterface.java
+_CLIENT=ServerInterface.java ChatClient.java ClientInterface.java ChatMessage.java
 CLIENT_CLASS=$(patsubst %,$(CLIENTDIR)/%,$(_CLIENT:.java=.class))
 #CLIENT_CLASS2=$(patsubst %,-C $(CDIR) %,$(_CLIENT:.java=.class))
-_SERVER=ServerInterface.java ChatServer.java ClientInterface.java
+_SERVER=ServerInterface.java ChatServer.java ClientInterface.java ChatMessage.java
 SERVER_CLASS=$(patsubst %,$(SERVERDIR)/%,$(_SERVER:.java=.class))
 #SERVER_CLASS2=$(patsubst %,-C $(CDIR) %,$(_SERVER:.java=.class))
 #CLIENT_BIN=$(CLIENTDIR)/ChattyClient.jar
