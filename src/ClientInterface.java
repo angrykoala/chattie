@@ -5,5 +5,4 @@ import java.rmi.RemoteException;
 public interface ClientInterface extends Remote {
     public void getMessage(String username,String message) throws RemoteException;
     public void kick() throws RemoteException;
-
 }

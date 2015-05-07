@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 public class ChatServer implements ServerInterface {
     ArrayList<String> users=new ArrayList<String>();
+    //HashMap<String,ClientInterface> users=new ArrayList<String>();
     Registry registry;
     public ChatServer(String serverName) {
         super();
         try {
-            LocateRegistry.createRegistry(1099);
+        	//this.registry=LocateRegistry.createRegistry(1099);
             this.registry=LocateRegistry.getRegistry();
             bindServer(serverName);
         }
@@ -21,11 +22,13 @@ public class ChatServer implements ServerInterface {
     }
 
     @Override
-    public boolean login(String username) throws RemoteException {
+    public boolean login(String username,ClientInterface client) throws RemoteException {
         System.out.println("Registrar "+username);
         if(users.contains(username)) return false;
         else {
             users.add(username);
+            registry.rebind(username, client);
+            client.getMessage("server", "sending stub works!!!");
             //	ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) clientStub,0);
             //	registry.rebind(username, stub);
             return true;
@@ -37,7 +40,6 @@ public class ChatServer implements ServerInterface {
     	 if(users.contains(username)) System.out.println("Mensaje de "+username+": "+mensaje);
         	for(String user : users){
         				try{
-        					System.out.println(user);
         				ClientInterface client = (ClientInterface) registry.lookup(user);
         				if(client!=null) client.getMessage(username,mensaje);
         				} catch ( RemoteException | NotBoundException e) {
@@ -48,6 +50,8 @@ public class ChatServer implements ServerInterface {
 
     @Override
     public void disconnect(String username) throws RemoteException, NotBoundException {
+    	ClientInterface client = (ClientInterface) registry.lookup(username);
+    	client.getMessage("server","you have been disconnected");
     	registry.unbind(username);
         users.remove(username);
         System.out.println(username+" se desconecto");
@@ -71,4 +75,16 @@ public class ChatServer implements ServerInterface {
         	e.printStackTrace();
         }*/
     }
+
+	@Override
+	public ArrayList<String> getUsers() throws RemoteException {
+		return users;
+	}
+
+	@Override
+	public boolean changeUsername(String oldUser, String newUser)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

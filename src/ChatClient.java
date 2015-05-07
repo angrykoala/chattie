@@ -1,3 +1,4 @@
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -9,7 +10,7 @@ public class ChatClient implements ClientInterface {
     private ServerInterface server=null;
 	private boolean logged=false;
 	private Registry registry;
-
+	
 	public ChatClient(){
 	super();
 	}
@@ -21,11 +22,12 @@ public class ChatClient implements ClientInterface {
         login();
     }
     private void login() throws RemoteException{
-    if(server.login(name)){ logged=true;
-    ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) this,0);
-    registry.rebind(this.name, stub);
-    }
-    else logged=false;
+        ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) this,0);
+    if(server.login(name,stub)) logged=true;
+    else{
+    	logged=false;
+    	unexportStub();	
+    	}
     }
     public void sendMessage(String message) throws RemoteException{
     	if(logged) server.sendMessage(this.name,message);
@@ -36,7 +38,8 @@ public class ChatClient implements ClientInterface {
     public void disconnect() throws RemoteException, NotBoundException{
     	if(logged){
     		server.disconnect(name);
-    	logged=false;
+    		UnicastRemoteObject.unexportObject(this,true);
+    		logged=false;
     	}
     }
     @Override
@@ -46,8 +49,17 @@ public class ChatClient implements ClientInterface {
     @Override    
     public void kick() throws RemoteException{
         logged=false;
+        unexportStub();
         System.out.println("You have been kicked from server");
         }
+    private void unexportStub(){
+    	try {
+			UnicastRemoteObject.unexportObject(this,true);
+		} catch (NoSuchObjectException e) {
+			System.out.println("error unexporting");
+		//	e.printStackTrace();
+		}
+    }
     /*	private static void bindClient(ClientInterface clientInterface,String clientName) throws RemoteException {
     		ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject(clientInterface,0);
     		Registry registry = LocateRegistry.getRegistry();
@@ -68,7 +80,7 @@ public class ChatClient implements ClientInterface {
             if(client.isLogged()) System.out.println("Login Success");
             else System.out.println("Login Fail");
             client.sendMessage("Bring your towel!!");
-            //client.disconnect();
+            client.disconnect();
         }
         catch(RemoteException | NotBoundException e) {
             e.printStackTrace();
