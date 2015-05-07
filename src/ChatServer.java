@@ -35,19 +35,20 @@ public class ChatServer implements ServerInterface {
     @Override
     public void sendMessage(String username, String mensaje) throws RemoteException {
     	 if(users.contains(username)) System.out.println("Mensaje de "+username+": "+mensaje);
-        /*	for(String user : users){
+        	for(String user : users){
         				try{
         					System.out.println(user);
         				ClientInterface client = (ClientInterface) registry.lookup(user);
-        				client.getMessage(username,mensaje);
+        				if(client!=null) client.getMessage(username,mensaje);
         				} catch ( RemoteException | NotBoundException e) {
         				e.printStackTrace();
         			}
-        		}*/
+        		}
     }
 
     @Override
-    public void disconnect(String username) throws RemoteException {
+    public void disconnect(String username) throws RemoteException, NotBoundException {
+    	registry.unbind(username);
         users.remove(username);
         System.out.println(username+" se desconecto");
     }
