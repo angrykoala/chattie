@@ -4,12 +4,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChatServer implements ServerInterface {
-    private ArrayList<String> users=new ArrayList<String>();
-    //private HashMap<String,ClientInterface> users=new ArrayList<String>();
+    //private ArrayList<String> users=new ArrayList<String>();
+    private HashMap<String,ClientInterface> users=new HashMap<String,ClientInterface>();
     private Registry registry;
     private final String serverName="Chattie Server";
+    
     public ChatServer(String serverName) {
         super();
         try {
@@ -25,40 +27,47 @@ public class ChatServer implements ServerInterface {
     @Override
     public boolean login(String username,ClientInterface client) throws RemoteException {
         System.out.println("Registrar "+username);
-        if(users.contains(username)) return false;
+        if(isUser(username)) return false;
         else if(username==serverName) return false;
         else {
-            users.add(username);
+            users.put(username,client);
             registry.rebind(username, client);
             client.getMessage(serverMessage("Login Success"));
-            //	ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) clientStub,0);
-            //	registry.rebind(username, stub);
             return true;
         }
     }
 
     @Override
     public void sendMessage(ChatMessage message) throws RemoteException {
-        if(users.contains(message.getAuthor())) {
-            for(String user : users) {
-                try {
-                    ClientInterface client = (ClientInterface) registry.lookup(user);
-                    if(client!=null) client.getMessage(message);
-                }
-                catch(RemoteException | NotBoundException e) {
-                    e.printStackTrace();
-                }
+        if(isUser(message)) {
+            for(ClientInterface user : users.values()) {
+                    if(user!=null) user.getMessage(message);
             }
         }
     }
-
+    private ClientInterface getUser(String username){
+    		return users.get(username);
+    }
+    private ClientInterface getUser(ChatMessage message){
+    	return getUser(message.getAuthor());
+    	
+    }
+    private boolean isUser(String username){
+    	return users.containsKey(username);
+    }
+    private boolean isUser(ChatMessage message){
+    	return isUser(message.getAuthor());
+    }
     @Override
     public void disconnect(String username) throws RemoteException, NotBoundException {
-        ClientInterface client = (ClientInterface) registry.lookup(username);
+       // ClientInterface client = (ClientInterface) registry.lookup(username);
+    	if(isUser(username)){
+    	ClientInterface client=getUser(username);
         client.getMessage(serverMessage("You have been logged out"));
         registry.unbind(username);
         users.remove(username);
         System.out.println(username+" log out");
+    	}
     }
 
     private void bindServer(String serverName) throws RemoteException {
@@ -77,14 +86,20 @@ public class ChatServer implements ServerInterface {
         new ChatServer("ChatServer");
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public ArrayList<String> getUsers() throws RemoteException {
-        return users;
+        return (ArrayList<String>) users.keySet();
     }
 
     @Override
-    public boolean changeUsername(String oldUser, String newUser)
-    throws RemoteException {
-        return false;
+    public boolean changeUsername(String oldUser, String newUser) throws RemoteException {
+    	if(isUser(oldUser) && !isUser(newUser)){
+    		ClientInterface user=getUser(oldUser);
+    		users.remove(oldUser);
+    		users.put(newUser,user);
+    		return true;
+    	}
+    	else return false;
     }
 }

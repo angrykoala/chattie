@@ -36,7 +36,7 @@ public class ChatClient implements ClientInterface {
     public void disconnect() throws RemoteException, NotBoundException {
         if(logged) {
             server.disconnect(name);
-            UnicastRemoteObject.unexportObject(this,true);
+            unexportStub();
             logged=false;
         }
     }
