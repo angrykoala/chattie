@@ -1,3 +1,4 @@
+
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -5,16 +6,16 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ChatClient implements ClientInterface {
+import gui.ChattieGUI;
+
+
+public class Chat extends ChattieGUI implements ClientInterface {
     private String name=null;
     private ServerInterface server=null;
     private boolean logged=false;
 
-    public ChatClient() {
-        super();
-    }
-    public ChatClient(String clientName,ServerInterface server) throws RemoteException {
-        super();
+    public Chat(String clientName,ServerInterface server) throws RemoteException {
+        super(clientName,null);
         this.name=clientName;
         this.server=server;
         login();
@@ -25,6 +26,7 @@ public class ChatClient implements ClientInterface {
         else {
             logged=false;
             unexportStub();
+            returnLogin();
         }
     }
     public void sendMessage(String message) throws RemoteException {
@@ -38,17 +40,22 @@ public class ChatClient implements ClientInterface {
             server.disconnect(name);
             unexportStub();
             logged=false;
+            returnLogin();
         }
+    }
+    private void returnLogin(){
+    	this.dispose();
+        new Login(server,null);
     }
     @Override
     public void getMessage(ChatMessage message) throws RemoteException {
-        System.out.println(message.getMessage());
+       addText(message.getMessage());
     }
     @Override
     public void kick() throws RemoteException {
         logged=false;
         unexportStub();
-        System.out.println("You have been kicked from server");
+        addText("You have been kicked from server");
     }
     private void unexportStub() {
         try {
@@ -59,26 +66,28 @@ public class ChatClient implements ClientInterface {
             //	e.printStackTrace();
         }
     }
+	@Override
+	protected void exitGUI() {
+		try {
+			disconnect();
+		} catch (RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
+		this.dispose();
+		
+	}
+	@Override
+	protected void sendGUI(String string) {
+		try {
+			sendMessage(string);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 
-    public static void main(String args[]) {
-        if(System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-        String serverName = "ChatServer";
-        Registry registry;
-        try {
-            registry = LocateRegistry.getRegistry(args[0]);
-            ServerInterface server = (ServerInterface) registry.lookup(serverName);
-            ChatClient client=new ChatClient("Ford",server);
-            if(!client.isLogged()) System.out.println("Login Fail");
-            client.sendMessage("Bring your towel!!");
-            client.disconnect();
-        }
-        catch(RemoteException | NotBoundException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 
 

@@ -13,7 +13,7 @@ CLIENTDIR=$(CDIR)/client
 SERVERDIR=$(CDIR)/server
 
 
-_CLIENT=ServerInterface.java ChatClient.java ClientInterface.java ChatMessage.java
+_CLIENT=ServerInterface.java ChattieClient.java ClientInterface.java ChatMessage.java Chat.java Login.java gui/ChattieGUI.java gui/LoginGUI.java
 CLIENT_CLASS=$(patsubst %,$(CLIENTDIR)/%,$(_CLIENT:.java=.class))
 #CLIENT_CLASS2=$(patsubst %,-C $(CDIR) %,$(_CLIENT:.java=.class))
 _SERVER=ServerInterface.java ChatServer.java ClientInterface.java ChatMessage.java
@@ -40,12 +40,14 @@ server: $(SERVERDIR)\/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
 $(SERVERDIR)/%.class: $(SDIR)/%.java
 	$(COMPILER) -d $(SERVERDIR) $^ -sourcepath $(SDIR)
 $(CLIENTDIR)/%.class: $(SDIR)/%.java
-	$(COMPILER) -d $(CLIENTDIR) $^ -sourcepath $(SDIR)
-classes/client/%.sh: launchers/%.sh
+	$(COMPILER) -d $(CLIENTDIR) $^ -sourcepath $(SDIR):$(SDIR)/gui
+$(CLIENTDIR)/gui/%.class: $(SDIR)/gui/%.java
+	$(COMPILER) -d $(CLIENTDIR)/gui $^ -sourcepath $(SDIR):$(SDIR)/gui
+$(CLIENTDIR)/%.sh: launchers/%.sh
 	cp $< $@
-classes/server/%.sh: launchers/%.sh
+$(SERVERDIR)/%.sh: launchers/%.sh
 	cp $< $@
-	
+
 
 %/:
 	mkdir -p $@

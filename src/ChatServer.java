@@ -6,6 +6,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+
 public class ChatServer implements ServerInterface {
     //private ArrayList<String> users=new ArrayList<String>();
     private HashMap<String,ClientInterface> users=new HashMap<String,ClientInterface>();
@@ -39,7 +41,7 @@ public class ChatServer implements ServerInterface {
 
     @Override
     public void sendMessage(ChatMessage message) throws RemoteException {
-        if(isUser(message)) {
+        if(isUser(message.getAuthor())) {
             for(ClientInterface user : users.values()) {
                     if(user!=null) user.getMessage(message);
             }
@@ -48,15 +50,9 @@ public class ChatServer implements ServerInterface {
     private ClientInterface getUser(String username){
     		return users.get(username);
     }
-    private ClientInterface getUser(ChatMessage message){
-    	return getUser(message.getAuthor());
-    	
-    }
-    private boolean isUser(String username){
-    	return users.containsKey(username);
-    }
-    private boolean isUser(ChatMessage message){
-    	return isUser(message.getAuthor());
+    public boolean isUser(String username) throws RemoteException{
+    	if(username.toLowerCase()=="server" && username.toLowerCase()==serverName.toLowerCase()) return false;
+    	else return users.containsKey(username);
     }
     @Override
     public void disconnect(String username) throws RemoteException, NotBoundException {

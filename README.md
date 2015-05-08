@@ -8,7 +8,7 @@ Simple Java application to deploy a simple chatting server easily using Java-rmi
 2. To run server, execute `bash server_launcher.sh` on classes/server folder
 3. To run client, execute `bash client_launcher.sh` on classes/client folder
 
-_Currentlly only local connection from client to server functionalities are working_
+_Basic Chat functionality with simple java GUI_
 
 
 Chattie is under [GNU GP License](https://github.com/demiurgosoft/chattie/blob/master/LICENSE)

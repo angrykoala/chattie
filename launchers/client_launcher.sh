@@ -6,4 +6,4 @@ policy="grant codeBase \"file:$dir/\" {
 };"
 echo $policy > client.policy;
 
-java -cp . -Djava.security.policy=client.policy ChatClient localhost 0
+java -cp . -Djava.security.policy=client.policy ChattieClient localhost 0
