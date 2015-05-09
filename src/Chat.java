@@ -43,13 +43,13 @@ public class Chat extends ChattieGUI implements ClientInterface {
             returnLogin();
         }
     }
-    private void returnLogin(){
-    	this.dispose();
+    private void returnLogin() {
+        this.dispose();
         new Login(server,null);
     }
     @Override
     public void getMessage(ChatMessage message) throws RemoteException {
-       addText(message.getMessage());
+        addText(message.getMessage());
     }
     @Override
     public void kick() throws RemoteException {
@@ -66,25 +66,25 @@ public class Chat extends ChattieGUI implements ClientInterface {
             //	e.printStackTrace();
         }
     }
-	@Override
-	protected void exitGUI() {
-		try {
-			disconnect();
-		} catch (RemoteException | NotBoundException e) {
-			e.printStackTrace();
-		}
-		this.dispose();
-		
-	}
-	@Override
-	protected void sendGUI(String string) {
-		try {
-			sendMessage(string);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
-	}
+    @Override
+    protected void exitGUI() {
+        try {
+            disconnect();
+        }
+        catch(RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+        this.dispose();
+    }
+    @Override
+    protected void sendGUI(String string) {
+        try {
+            sendMessage(string);
+        }
+        catch(RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

@@ -56,7 +56,7 @@ $(SERVERDIR)/%.sh: launchers/%.sh
 
 .PHONY: astyle
 astyle:
-	astyle --style=java --break-closing-brackets --align-pointer=name --delete-empty-lines --indent-col1-comments --unpad-paren -n -Q $(SDIR)/*.java
+	astyle --style=java --break-closing-brackets --align-pointer=name --delete-empty-lines --indent-col1-comments --unpad-paren -n -Q $(SDIR)/*.java $(SDIR)/*/*.java
 .PHONY: clean
 clean:
 	rm -r -f  $(CDIR) *~ $(SDIR)/*~ *.class *.jar
