@@ -2,14 +2,12 @@
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import gui.ChattieGUI;
+import gui.ClientGUI;
 
 
-public class Chat extends ChattieGUI implements ClientInterface {
+public class Chat extends ClientGUI implements ClientInterface {
     private String name=null;
     private ServerInterface server=null;
     private boolean logged=false;
@@ -40,7 +38,6 @@ public class Chat extends ChattieGUI implements ClientInterface {
             server.disconnect(name);
             unexportStub();
             logged=false;
-            returnLogin();
         }
     }
     private void returnLogin() {
@@ -75,6 +72,16 @@ public class Chat extends ChattieGUI implements ClientInterface {
             e.printStackTrace();
         }
         this.dispose();
+    }
+    @Override
+    protected void returnGUI(){
+    	try {
+			disconnect();
+		} catch (RemoteException | NotBoundException e) {
+			e.printStackTrace();
+		}
+    	returnLogin();
+    	
     }
     @Override
     protected void sendGUI(String string) {
