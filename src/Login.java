@@ -9,7 +9,7 @@ public class Login extends LoginGUI {
     public Login(ServerInterface server,ImageIcon icon) {
         super(icon);
         this.server=server;
-        this.setVisible(true);
+        
     }
 
     @Override

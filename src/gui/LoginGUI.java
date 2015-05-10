@@ -19,6 +19,8 @@ public abstract class LoginGUI extends javax.swing.JFrame {
         initComponents();
         setTitle("Chattie");
         if(icon!=null)  this.setIconImage(icon.getImage());
+        setVisible(true);
+        setLocationRelativeTo(null);
     }
     protected abstract boolean login(String username);
     private void sendLogin() {

@@ -16,6 +16,8 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         initComponents();
         setUsername(username);
         if(icon!=null) this.setIconImage(icon.getImage());
+        setVisible(true);
+        setLocationRelativeTo(null);
     }
     //Override for exit action
     protected abstract void exitGUI();
