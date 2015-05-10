@@ -3,6 +3,7 @@ import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 import gui.ClientGUI;
 
@@ -54,6 +55,10 @@ public class Chat extends ClientGUI implements ClientInterface {
         unexportStub();
         addText("You have been kicked from server");
     }
+    @Override
+	public void updateUsers(ArrayList<String> users) throws RemoteException {
+		setUsers(users);		
+	}
     private void unexportStub() {
         try {
             UnicastRemoteObject.unexportObject(this,true);
@@ -92,10 +97,5 @@ public class Chat extends ClientGUI implements ClientInterface {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 
 }

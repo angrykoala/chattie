@@ -10,5 +10,5 @@ public interface ServerInterface extends Remote {
     public boolean changeUsername(String oldUser,String newUser) throws RemoteException;
     public void sendMessage(ChatMessage message) throws RemoteException;
     public void disconnect(String username) throws RemoteException, NotBoundException;
-    public ArrayList<String> getUsers() throws RemoteException;
+  //  public ArrayList<String> getUsers() throws RemoteException;
 }

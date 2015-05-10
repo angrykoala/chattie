@@ -34,6 +34,7 @@ public class ChatServer implements ServerInterface {
             users.put(username,client);
             registry.rebind(username, client);
             client.getMessage(serverMessage("Login Success"));
+            updateUserList();
             return true;
         }
     }
@@ -45,6 +46,13 @@ public class ChatServer implements ServerInterface {
                 if(user!=null) user.getMessage(message);
             }
         }
+    }
+    private void updateUserList() throws RemoteException{
+    	ArrayList<String> usersList=getUsers();
+        for(ClientInterface user : users.values()) {
+            if(user!=null) user.updateUsers(usersList);
+        }
+    	
     }
     private ClientInterface getUser(String username) {
         return users.get(username);
@@ -61,6 +69,7 @@ public class ChatServer implements ServerInterface {
             client.getMessage(serverMessage("You have been logged out"));
             registry.unbind(username);
             users.remove(username);
+            updateUserList();
             System.out.println(username+" log out");
         }
     }
@@ -81,10 +90,8 @@ public class ChatServer implements ServerInterface {
         new ChatServer("ChatServer");
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public ArrayList<String> getUsers() throws RemoteException {
-        return (ArrayList<String>) users.keySet();
+	public ArrayList<String> getUsers() {
+    	return new ArrayList<String>(users.keySet());
     }
 
     @Override
