@@ -2,7 +2,11 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
+/* NAME: ChatMessage
+ * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
+ * AUTHOR: demiurgosoft
+ * DESCRIPTION: Message trasmitted by chattie
+ */
 public class ChatMessage implements Serializable {
     private static final long serialVersionUID = -5185462978942891292L;
     private String author;

@@ -1,6 +1,7 @@
 Chattie
 =======
-_by @demiurgosoft_
+_by @demiurgosoft_    
+[Chattie is in GitHub](https://github.com/demiurgosoft/chattie)
 Simple Java application to deploy a simple chatting server easily using Java-rmi
 
 ##Instructions
@@ -18,7 +19,7 @@ _Currently, only direct connection is supported_
 
 Chattie is under [GNU GP License](https://github.com/demiurgosoft/chattie/blob/master/LICENSE)
 
-chattie.icon is under LGPL license by [Everaldo Coelho](http://icones.pro/es/pinguino-tux-chat-2-imagen-png.html) as tux_chat
+_chattie.png_ is under LGPL license by [Everaldo Coelho](http://icones.pro/es/pinguino-tux-chat-2-imagen-png.html) as tux_chat
 
 ##Troubleshooting
 In case that Chattie is not working (Server or Client side) try some of the possible solutions:

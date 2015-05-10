@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import static java.awt.event.KeyEvent.VK_ENTER;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
+/* NAME: ClientGUI
+ * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
+ * AUTHOR: demiurgosoft
+ * DESCRIPTION: Main chat GUI for Chattie
+ */
 public abstract class ClientGUI extends javax.swing.JFrame {
 
     String username; //username to be used on GUI

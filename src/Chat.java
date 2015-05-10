@@ -1,22 +1,31 @@
 
 import java.rmi.NoSuchObjectException;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import gui.ClientGUI;
 
-
+/* NAME: Chat
+ * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
+ * AUTHOR: demiurgosoft
+ * DESCRIPTION: Client chat
+ */
 public class Chat extends ClientGUI implements ClientInterface {
     private String name=null;
     private ServerInterface server=null;
     private boolean logged=false;
+    private ImageIcon icon;
 
-    public Chat(String clientName,ServerInterface server) throws RemoteException {
-        super(clientName,null);
+    public Chat(String clientName,ServerInterface server,ImageIcon icon) throws RemoteException {
+        super(clientName,icon);
         this.name=clientName;
         this.server=server;
+        this.icon=icon;
         login();
     }
     private void login() throws RemoteException {
@@ -43,7 +52,7 @@ public class Chat extends ClientGUI implements ClientInterface {
     }
     private void returnLogin() {
         this.dispose();
-        new Login(server,null);
+        new Login(server,icon);
     }
     @Override
     public void getMessage(ChatMessage message) throws RemoteException {

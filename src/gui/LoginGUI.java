@@ -3,15 +3,10 @@ package gui;
 import static java.awt.event.KeyEvent.VK_ENTER;
 import javax.swing.ImageIcon;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author andrew
+/* NAME: LoginGUI
+ * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
+ * AUTHOR: demiurgosoft
+ * DESCRIPTION: Login GUI for Chattie
  */
 public abstract class LoginGUI extends javax.swing.JFrame {
 

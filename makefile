@@ -7,6 +7,7 @@ LINKER=jar
 
 #Directories
 SDIR=src
+GUISDIR=$(SDIR)/gui
 CDIR=classes
 BDIR=bin
 CLIENTDIR=$(CDIR)/client
@@ -21,12 +22,14 @@ SERVER_CLASS=$(patsubst %,$(SERVERDIR)/%,$(_SERVER:.java=.class))
 #SERVER_CLASS2=$(patsubst %,-C $(CDIR) %,$(_SERVER:.java=.class))
 #CLIENT_BIN=$(CLIENTDIR)/ChattyClient.jar
 #SERVER_BIN=$(SERVERDIR)/ChattyServer.jar
+ICON=chattie.png
 
 .PHONY: all
 all: client server
 
 .PHONY: client
 client: $(CLIENTDIR)\/ $(CLIENT_CLASS) $(CLIENTDIR)/client_launcher.sh
+	cp $(ICON) $(CLIENTDIR)
 
 .PHONY: server
 server: $(SERVERDIR)\/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
@@ -40,9 +43,9 @@ server: $(SERVERDIR)\/ $(SERVER_CLASS) $(SERVERDIR)/server_launcher.sh
 $(SERVERDIR)/%.class: $(SDIR)/%.java
 	$(COMPILER) -d $(SERVERDIR) $^ -sourcepath $(SDIR)
 $(CLIENTDIR)/%.class: $(SDIR)/%.java
-	$(COMPILER) -d $(CLIENTDIR) $^ -sourcepath $(SDIR):$(SDIR)/gui
+	$(COMPILER) -d $(CLIENTDIR) $^ -sourcepath $(SDIR):$(GUISDIR)
 $(CLIENTDIR)/gui/%.class: $(SDIR)/gui/%.java
-	$(COMPILER) -d $(CLIENTDIR)/gui $^ -sourcepath $(SDIR):$(SDIR)/gui
+	$(COMPILER) -d $(CLIENTDIR)/gui $^ -sourcepath $(SDIR):$(GUISDIR)
 $(CLIENTDIR)/%.sh: launchers/%.sh
 	cp $< $@
 $(SERVERDIR)/%.sh: launchers/%.sh
