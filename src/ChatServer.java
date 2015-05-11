@@ -62,11 +62,11 @@ public class ChatServer implements ServerInterface {
     public boolean validUser(String username) throws RemoteException {
     	if(username==null || username.length()<3 || username.length()>15) return false;
     	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
-    	else if(username.toLowerCase()=="server" || username.toLowerCase()==serverName.toLowerCase()) return false;
+    	else if(username.toLowerCase().equals("server") || username.toLowerCase().equals(serverName.toLowerCase())) return false;
         else return !isUser(username);
     }
     public boolean isUser(String username){
-    	if(username==serverName) return true;
+    	if(username.equals(serverName)) return true;
     	else return users.containsKey(username);
     }
     
