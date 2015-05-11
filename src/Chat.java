@@ -110,8 +110,28 @@ public class Chat extends ClientGUI implements ClientInterface {
             sendMessage(string);
         }
         catch(RemoteException e) {
-            addText("Message couldn't be sent");
+            addText("Message couldn't be sent, trying to reconnect");
+            reconnectGUI();
+            
         }
     }
+	@Override
+	protected void reconnectGUI() {
+		try {
+			disconnect();
+		} catch (RemoteException | NotBoundException e1) {
+		}
+		try {
+			this.server=ChattieClient.connectToServer();
+			login();
+		} catch (RemoteException | NotBoundException e) {
+			addText("Problem Connecting to server");
+		}
+	}
+	@Override
+	protected void changeUsernameGUI() {
+		//if(server.changeUsername(String oldUser,String newUser) throws RemoteException;
+		//TODO
+	}
 
 }

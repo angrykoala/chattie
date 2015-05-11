@@ -23,7 +23,8 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     }
     //Override for exit action
     protected abstract void exitGUI();
-    
+    protected abstract void reconnectGUI();
+    protected abstract void changeUsernameGUI();
     //Override if want to return instead of simply exit
     protected void returnGUI(){
         exitGUI();
@@ -69,6 +70,14 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         chatArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         usersList = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        reconnectMenu = new javax.swing.JMenuItem();
+        changeUsernameMenu = new javax.swing.JMenuItem();
+        disconnectMenu = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        sendMenu = new javax.swing.JMenuItem();
+        clearMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -112,6 +121,56 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         usersList.setRows(5);
         jScrollPane2.setViewportView(usersList);
 
+        fileMenu.setText("File");
+
+        reconnectMenu.setText("Reconnect");
+        reconnectMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reconnectMenuActionPerformed(evt);
+            }
+        });
+        fileMenu.add(reconnectMenu);
+
+        changeUsernameMenu.setText("Change username");
+        changeUsernameMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeUsernameMenuActionPerformed(evt);
+            }
+        });
+        fileMenu.add(changeUsernameMenu);
+
+        disconnectMenu.setText("Disconnect");
+        disconnectMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnectMenuActionPerformed(evt);
+            }
+        });
+        fileMenu.add(disconnectMenu);
+
+        jMenuBar1.add(fileMenu);
+
+        editMenu.setText("Edit");
+
+        sendMenu.setText("Send");
+        sendMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendMenuActionPerformed(evt);
+            }
+        });
+        editMenu.add(sendMenu);
+
+        clearMenu.setText("Clear");
+        clearMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearMenuActionPerformed(evt);
+            }
+        });
+        editMenu.add(clearMenu);
+
+        jMenuBar1.add(editMenu);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,7 +178,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                     .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -139,7 +198,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,14 +228,42 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_userInputKeyPressed
 
+    private void reconnectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reconnectMenuActionPerformed
+        reconnectGUI();
+    }//GEN-LAST:event_reconnectMenuActionPerformed
+
+    private void changeUsernameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUsernameMenuActionPerformed
+        changeUsernameGUI();
+    }//GEN-LAST:event_changeUsernameMenuActionPerformed
+
+    private void disconnectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectMenuActionPerformed
+       returnGUI();
+    }//GEN-LAST:event_disconnectMenuActionPerformed
+
+    private void sendMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendMenuActionPerformed
+      sendAction();
+    }//GEN-LAST:event_sendMenuActionPerformed
+
+    private void clearMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuActionPerformed
+       userInput.setText(null);
+    }//GEN-LAST:event_clearMenuActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem changeUsernameMenu;
     private javax.swing.JTextArea chatArea;
+    private javax.swing.JMenuItem clearMenu;
+    private javax.swing.JMenuItem disconnectMenu;
+    private javax.swing.JMenu editMenu;
     private javax.swing.JButton exitButton;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JMenuItem reconnectMenu;
     private javax.swing.JButton sendButton;
+    private javax.swing.JMenuItem sendMenu;
     private javax.swing.JLabel title;
     private javax.swing.JTextArea userInput;
     private javax.swing.JTextArea usersList;

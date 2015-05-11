@@ -10,13 +10,11 @@ import gui.LoginGUI;
  */
 public class Login extends LoginGUI {
     private ServerInterface server;
-    private Chat mainChat;
     private ImageIcon icon;
     public Login(ServerInterface server,ImageIcon icon) {
         super(icon);
         this.icon=icon;
         this.server=server;
-        
     }
 
     @Override
@@ -31,7 +29,7 @@ public class Login extends LoginGUI {
             return false;
         }
         if(validUser==true) {
-                    mainChat=new Chat(username,server,icon);
+                    new Chat(username,server,icon);
                    
            
             return true;
