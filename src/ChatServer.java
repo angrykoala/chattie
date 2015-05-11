@@ -1,3 +1,4 @@
+import java.rmi.AccessException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -42,17 +43,30 @@ public class ChatServer implements ServerInterface {
     }
 
     @Override
-    public void sendMessage(ChatMessage message) throws RemoteException {
+    public void sendMessage(ChatMessage message) {
         if(isUser(message.getAuthor()) && message.isValid()) {
-            for(ClientInterface user : users.values()) {
-                if(user!=null) user.getMessage(message);
+            for(String username : users.keySet()) {
+                if(username!=null){
+					try {
+						users.get(username).getMessage(message);
+					} catch (RemoteException e) {
+						kick(username);
+					}
+            }
             }
         }
     }
-    private void updateUserList() throws RemoteException{
+    private void updateUserList() {
     	ArrayList<String> usersList=getUsers();
-        for(ClientInterface user : users.values()) {
-            if(user!=null) user.updateUsers(usersList);
+        for(String username : users.keySet()) {
+            if(username!=null){
+				try {
+					users.get(username).updateUsers(usersList);
+				} catch (RemoteException e) {
+					kick(username);
+					break;
+				}
+        }
         }
     	
     }
@@ -60,6 +74,7 @@ public class ChatServer implements ServerInterface {
         return users.get(username);
     }
     public boolean validUser(String username) throws RemoteException {
+    	updateUserList();
     	if(username==null || username.length()<3 || username.length()>15) return false;
     	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
     	else if(username.toLowerCase().equals("server") || username.toLowerCase().equals(serverName.toLowerCase())) return false;
@@ -75,9 +90,7 @@ public class ChatServer implements ServerInterface {
         if(isUser(username)) {
             ClientInterface client=getUser(username);
             client.getMessage(serverMessage("You have been logged out"));
-            registry.unbind(username);
-            users.remove(username);
-            updateUserList();
+            removeUser(username);
             System.out.println(username+" disconnected");
             sendMessage(serverMessage(username+" disconnected"));
         }
@@ -108,17 +121,20 @@ public class ChatServer implements ServerInterface {
         }
         else return false;
     }
-    private void kick(String username) throws RemoteException, NotBoundException{
+    private void kick(String username) {
     	 if(isUser(username)) {
              ClientInterface client=getUser(username);
-             client.getMessage(serverMessage("You have been Kicked out"));
-             client.kick();
-             registry.unbind(username);
-             users.remove(username);
-             updateUserList();
+             try {
+				client.getMessage(serverMessage("You have been Kicked out"));
+				client.kick();
+			} catch (RemoteException e) {
+				//System.out.println();
+			}
+             removeUser(username);
              System.out.println(username+" kicked out");
              sendMessage(serverMessage("user "+username+" was kicked"));
          }
+    	 updateUserList();
     	
     }
     private void shutdown() throws RemoteException, NotBoundException{
@@ -133,6 +149,15 @@ public class ChatServer implements ServerInterface {
         catch(NoSuchObjectException e) {
             System.out.println("error unexporting");
         }
+    }
+    private void removeUser(String username){
+        try {
+			registry.unbind(username);
+		} catch (RemoteException | NotBoundException e) {
+			System.out.println("Error unbinding username");
+		}
+        users.remove(username);
+		updateUserList();
     }
     public static void main(String[] args) {
         if(System.getSecurityManager() == null) {
