@@ -28,10 +28,11 @@ public class ChatServer implements ServerInterface {
 
     @Override
     public boolean login(String username,ClientInterface client) throws RemoteException {
-        System.out.println("Registrar "+username);
+        System.out.println(username+" connected");
         if(!validUser(username)) return false;
         else if(username==serverName) return false;
         else {
+        	sendMessage(serverMessage(username+" connected"));
             users.put(username,client);
             registry.rebind(username, client);
             client.getMessage(serverMessage("Login Success"));
@@ -77,7 +78,8 @@ public class ChatServer implements ServerInterface {
             registry.unbind(username);
             users.remove(username);
             updateUserList();
-            System.out.println(username+" log out");
+            System.out.println(username+" disconnected");
+            sendMessage(serverMessage(username+" disconnected"));
         }
     }
 
@@ -112,10 +114,12 @@ public class ChatServer implements ServerInterface {
              users.remove(username);
              updateUserList();
              System.out.println(username+" kicked out");
+             sendMessage(serverMessage("user "+username+" was kicked"));
          }
     	
     }
     private void shutdown() throws RemoteException, NotBoundException{
+    	sendMessage(serverMessage("server si shutting down"));
     	for(String user : users.keySet()) {
             kick(user);
         }
