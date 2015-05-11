@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
  */
 public abstract class ClientGUI extends javax.swing.JFrame {
 
-    String username; //username to be used on GUI
     public ClientGUI(String username,ImageIcon icon) {
         initComponents();
         setUsername(username);
@@ -27,10 +26,10 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         exitGUI();
     }
     protected abstract void sendGUI(String string);
-    protected void setUsers(ArrayList<String> users){
+    protected void setUsers(ArrayList<String> users,String username){
     	usersList.setText(null);
         for(String user:users){
-            if(user==username) usersList.append(">");
+            if(user.equals(username)) usersList.append(">");
             usersList.append(user+"\n");
         }
     }
@@ -39,7 +38,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
             chatArea.append(string+"\n");
     }
     private void setUsername(String username) {
-        this.username=username;
         title.setText(username);
         setTitle("Chattie - "+username);
     }

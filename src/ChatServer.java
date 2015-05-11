@@ -100,7 +100,10 @@ public class ChatServer implements ServerInterface {
         if(isUser(oldUser) && validUser(newUser)) {
             ClientInterface user=getUser(oldUser);
             users.remove(oldUser);
+            sendMessage(serverMessage(oldUser+" change name to" + newUser));
             users.put(newUser,user);
+            updateUserList();
+            
             return true;
         }
         else return false;

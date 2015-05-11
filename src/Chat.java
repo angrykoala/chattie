@@ -68,7 +68,7 @@ public class Chat extends ClientGUI implements ClientInterface {
     }
     @Override
 	public void updateUsers(ArrayList<String> users) throws RemoteException {
-		setUsers(users);		
+		setUsers(users,this.name);		
 	}
     private void unexportStub() {
         try {
