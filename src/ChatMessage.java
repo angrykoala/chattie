@@ -16,7 +16,7 @@ public class ChatMessage implements Serializable {
     public ChatMessage(String author,String content) {
         super();
         this.author=author;
-        this.content=content;
+        this.content=content.trim();
         this.time=getTime();
     }
     public String getMessage() {
@@ -25,7 +25,12 @@ public class ChatMessage implements Serializable {
     public String getAuthor() {
         return author;
     }
-
+    public boolean isValid(){
+    	if(author==null || author.replace(" ","").isEmpty()) return false;
+    	else if(content==null || content.replace(" ","").isEmpty()) return false;
+    	else if(time==null || time.replace(" ","").isEmpty()) return false;
+     	else return true;    	
+    }
     private String getTime() {
         Calendar cal = Calendar.getInstance();
         cal.getTime();

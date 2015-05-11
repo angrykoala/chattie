@@ -1,3 +1,4 @@
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -18,7 +19,7 @@ public class ChatServer implements ServerInterface {
         try {
             //this.registry=LocateRegistry.createRegistry(1099); //to create registry
             this.registry=LocateRegistry.getRegistry();
-            bindServer(serverName);
+            bindServer();
         }
         catch(RemoteException e) {
             e.printStackTrace();
@@ -41,7 +42,7 @@ public class ChatServer implements ServerInterface {
 
     @Override
     public void sendMessage(ChatMessage message) throws RemoteException {
-        if(isUser(message.getAuthor())) {
+        if(isUser(message.getAuthor()) && message.isValid()) {
             for(ClientInterface user : users.values()) {
                 if(user!=null) user.getMessage(message);
             }
@@ -58,13 +59,16 @@ public class ChatServer implements ServerInterface {
         return users.get(username);
     }
     public boolean validUser(String username) throws RemoteException {
-        if(username.toLowerCase()=="server" || username.toLowerCase()==serverName.toLowerCase()) return false;
+    	if(username==null || username.length()<3) return false;
+    	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
+    	else if(username.toLowerCase()=="server" || username.toLowerCase()==serverName.toLowerCase()) return false;
         else return !isUser(username);
     }
     public boolean isUser(String username){
     	if(username==serverName) return true;
     	else return users.containsKey(username);
     }
+    
     @Override
     public void disconnect(String username) throws RemoteException, NotBoundException {
         if(isUser(username)) {
@@ -77,7 +81,7 @@ public class ChatServer implements ServerInterface {
         }
     }
 
-    private void bindServer(String serverName) throws RemoteException {
+    private void bindServer() throws RemoteException {
         ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) this,0);
         registry.rebind(serverName, stub);
     }
@@ -98,6 +102,30 @@ public class ChatServer implements ServerInterface {
             return true;
         }
         else return false;
+    }
+    private void kick(String username) throws RemoteException, NotBoundException{
+    	 if(isUser(username)) {
+             ClientInterface client=getUser(username);
+             client.getMessage(serverMessage("You have been Kicked out"));
+             client.kick();
+             registry.unbind(username);
+             users.remove(username);
+             updateUserList();
+             System.out.println(username+" kicked out");
+         }
+    	
+    }
+    private void shutdown() throws RemoteException, NotBoundException{
+    	for(String user : users.keySet()) {
+            kick(user);
+        }
+    	registry.unbind(serverName);
+    	try {
+            UnicastRemoteObject.unexportObject(this,true);
+        }
+        catch(NoSuchObjectException e) {
+            System.out.println("error unexporting");
+        }
     }
     public static void main(String[] args) {
         if(System.getSecurityManager() == null) {

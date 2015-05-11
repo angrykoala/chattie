@@ -60,9 +60,11 @@ public class Chat extends ClientGUI implements ClientInterface {
     }
     @Override
     public void kick() throws RemoteException {
-        logged=false;
+       if(logged){
+    	logged=false;
         unexportStub();
         addText("You have been kicked from server");
+       }
     }
     @Override
 	public void updateUsers(ArrayList<String> users) throws RemoteException {
@@ -74,7 +76,6 @@ public class Chat extends ClientGUI implements ClientInterface {
         }
         catch(NoSuchObjectException e) {
             System.out.println("error unexporting");
-            //	e.printStackTrace();
         }
     }
     @Override
