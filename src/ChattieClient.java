@@ -28,7 +28,7 @@ public class ChattieClient {
             new Login(server,icon);
         }
         catch(RemoteException | NotBoundException e1) {
-            e1.printStackTrace();
+            System.out.println("Couldn't connect to server");
         }
     }
 }

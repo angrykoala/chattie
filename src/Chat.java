@@ -21,12 +21,18 @@ public class Chat extends ClientGUI implements ClientInterface {
     private boolean logged=false;
     private ImageIcon icon;
 
-    public Chat(String clientName,ServerInterface server,ImageIcon icon) throws RemoteException {
+    public Chat(String clientName,ServerInterface server,ImageIcon icon)  {
         super(clientName,icon);
         this.name=clientName;
         this.server=server;
         this.icon=icon;
-        login();
+        try {
+			login();
+		} catch (RemoteException e) {
+			System.out.println("Error login in");
+			returnLogin();
+			
+		}
     }
     private void login() throws RemoteException {
         ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) this,0);
@@ -84,7 +90,7 @@ public class Chat extends ClientGUI implements ClientInterface {
             disconnect();
         }
         catch(RemoteException | NotBoundException e) {
-            e.printStackTrace();
+            
         }
         this.dispose();
     }
@@ -93,7 +99,7 @@ public class Chat extends ClientGUI implements ClientInterface {
     	try {
 			disconnect();
 		} catch (RemoteException | NotBoundException e) {
-			e.printStackTrace();
+			
 		}
     	returnLogin();
     	
@@ -104,7 +110,7 @@ public class Chat extends ClientGUI implements ClientInterface {
             sendMessage(string);
         }
         catch(RemoteException e) {
-            e.printStackTrace();
+            addText("Message couldn't be sent");
         }
     }
 

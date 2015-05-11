@@ -26,19 +26,20 @@ public class Login extends LoginGUI {
             validUser=server.validUser(username);
         }
         catch(RemoteException e) {
-            e.printStackTrace();
+            setErrorLabel("Connection Problem");
+            disableLogin();
+            return false;
         }
         if(validUser==true) {
-            //this.dispose();
-            try {
-                mainChat=new Chat(username,server,icon);
-            }
-            catch(RemoteException e) {
-                e.printStackTrace();
-            }
+                    mainChat=new Chat(username,server,icon);
+                   
+           
             return true;
         }
-        else return false;
+        else{
+        	setErrorLabel("Login Failed");
+        	return false;
+        }
     }
 
 

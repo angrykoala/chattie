@@ -18,11 +18,16 @@ public abstract class LoginGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
     protected abstract boolean login(String username);
+    protected void setErrorLabel(String errorMessage){
+    	errorLabel.setText(errorMessage);
+    }
+    protected void disableLogin(){
+    	loginButton.setEnabled(false);
+    }
     private void sendLogin() {
         String username=userInput.getText();
         username=username.trim();
-        if(login(username)==false) errorLabel.setText("Login Failed");
-        else this.dispose();
+        if(login(username)==true)this.dispose();
     }
 
     /**
