@@ -20,7 +20,7 @@ public abstract class LoginGUI extends javax.swing.JFrame {
     protected abstract boolean login(String username);
     private void sendLogin() {
         String username=userInput.getText();
-        userInput.setText(null);
+        username=username.trim();
         if(login(username)==false) errorLabel.setText("Login Failed");
         else this.dispose();
     }

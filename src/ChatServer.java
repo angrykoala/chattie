@@ -60,7 +60,7 @@ public class ChatServer implements ServerInterface {
         return users.get(username);
     }
     public boolean validUser(String username) throws RemoteException {
-    	if(username==null || username.length()<3) return false;
+    	if(username==null || username.length()<3 || username.length()>15) return false;
     	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
     	else if(username.toLowerCase()=="server" || username.toLowerCase()==serverName.toLowerCase()) return false;
         else return !isUser(username);

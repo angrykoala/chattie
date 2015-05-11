@@ -2,7 +2,7 @@ Chattie
 =======
 _by @demiurgosoft_    
 [Chattie is in GitHub](https://github.com/demiurgosoft/chattie)
-Simple Java application to deploy a simple chatting server easily using Java-rmi
+Java application to deploy a simple chatting client-server easily using Java-rmi
 
 ##Instructions
 1. Run `make` to compile both, Chattie server and client
@@ -13,14 +13,6 @@ Simple Java application to deploy a simple chatting server easily using Java-rmi
 	* If not running on linux, modify server_launcher.sh ip manually: `-Djava.rmi.server.hostname=<<Your Ip>>`
 	* If Server is not running on localhost, modify manually the ip of where Chattie server is running: `ChattieClient <<Server Ip>> 0`
 
-_Basic Chat functionality with simple java GUI_
-
-_Currently, only direct connection is supported_
-
-Chattie is under [GNU GP License](https://github.com/demiurgosoft/chattie/blob/master/LICENSE)
-
-_chattie.png_ is under LGPL license by [Everaldo Coelho](http://icones.pro/es/pinguino-tux-chat-2-imagen-png.html) as tux_chat
-
 ##Troubleshooting
 In case that Chattie is not working (Server or Client side) try some of the possible solutions:
 
@@ -30,3 +22,11 @@ In case that Chattie is not working (Server or Client side) try some of the poss
 * Server is running, but client doesn't connect
 	* If the Sever doesn't show a message when user try to connect, make sure you have properly assigned the server ip to client (check instructions, step 4)
 	* If the server shows a message, but client crash, make sure you have properly assigned the server & client ips (instructions, steps 3 & 4)
+	
+-----------------------
+
+_Currently, only direct connection is supported with basic All to All chat_
+
+Chattie is under [GNU GP License](https://github.com/demiurgosoft/chattie/blob/master/LICENSE)
+
+_chattie.png_ is under LGPL license by [Everaldo Coelho](http://icones.pro/es/pinguino-tux-chat-2-imagen-png.html) as tux_chat
