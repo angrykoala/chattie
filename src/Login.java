@@ -19,6 +19,8 @@ public class Login extends LoginGUI {
 
     @Override
     protected boolean login(String username) {
+    	username=username.trim(); //"trim" username, removing initial and final spaces
+    	username=username.replaceAll("\\s", "_"); //changes spaces to dash
         boolean validUser=false;
         try {
             validUser=server.validUser(username);
