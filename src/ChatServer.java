@@ -8,9 +8,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/* NAME: ChatServer
+ * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
+ * AUTHOR: demiurgosoft
+ * DESCRIPTION: Main Chattie server program
+ */
 public class ChatServer implements ServerInterface {
-    //private ArrayList<String> users=new ArrayList<String>();
     private HashMap<String,ClientInterface> users=new HashMap<String,ClientInterface>();
     private Registry registry;
     private String serverName;;
@@ -43,7 +46,7 @@ public class ChatServer implements ServerInterface {
     }
 
     @Override
-    public void sendMessage(ChatMessage message) {
+    public boolean sendMessage(ChatMessage message) {
         if(isUser(message.getAuthor()) && message.isValid()) {
             for(String username : users.keySet()) {
                 if(username!=null){
@@ -54,6 +57,11 @@ public class ChatServer implements ServerInterface {
 					}
             }
             }
+            return true;
+        }
+        else{
+        	if(isUser(message.getAuthor())) return true;
+        	else return false;
         }
     }
     private void updateUserList() {

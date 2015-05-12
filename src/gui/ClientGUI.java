@@ -20,6 +20,8 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         DefaultCaret caret = (DefaultCaret)chatArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        
+        changeUsernameMenu.setEnabled(false);
     }
     //Override for exit action
     protected abstract void exitGUI();

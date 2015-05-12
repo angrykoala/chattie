@@ -44,7 +44,12 @@ public class Chat extends ClientGUI implements ClientInterface {
         }
     }
     public void sendMessage(String message) throws RemoteException {
-        if(logged) server.sendMessage(new ChatMessage(this.name,message));
+    	 boolean b=false;
+        if(logged) b=server.sendMessage(new ChatMessage(this.name,message));
+        if(b==false){
+        	addText("server rejected message, trying reconnecting");
+        	reconnectGUI();	
+        }
     }
     public boolean isLogged() {
         return logged;
