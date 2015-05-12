@@ -1,7 +1,7 @@
 Chattie
 =======
 _by @demiurgosoft_    
-[Chattie is in GitHub](https://github.com/demiurgosoft/chattie)
+[Chattie is in GitHub](https://github.com/demiurgosoft/chattie)    
 Java application to deploy a simple chatting client-server easily using Java-rmi
 
 ##Instructions
@@ -25,8 +25,7 @@ In case that Chattie is not working (Server or Client side) try some of the poss
 * _Problem executing java application_: To execute .class java, make sure you have jdk installed (if possible jdk >= 7)
 
 * _Server is running, but client doesn't connect_:
-	
-	* Make sure your **username is correct**, it can't be already on use, also, server won't allow any variation of capital letters ("Jack,jack and jaCk won't be accepted at the same time), you can't chose the same name as the server name or names containing "server", also, server may have a banned list of names. Names with blank spaces may be used (Chattie will substitute for dashes) but could make some trouble
+	* Make sure your **username is correct**, it can't be already on use, also, server won't allow any variation of capital letters ("Jack,jack and jaCk won't be accepted at the same time), you can't chose the same name as the server name or names containing "server", also, server may have a banned list of names. Names with blank spaces can be used (Chattie will substitute for dashes, for example "Ford Prefect" will turn into "Ford_Prefect"), but anyway try to use a name without blank spaces to avoid problems with server.
 	
 	* If the Sever doesn't show a message when user try to connect, make sure you have properly assigned the server ip to client (check instructions, step 4)
 	
