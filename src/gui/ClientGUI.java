@@ -52,6 +52,9 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         userInput.setText(null);
         sendGUI(message);
     }
+    private void showHelp(){
+        
+    }
     
 
     /**
@@ -77,9 +80,12 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         reconnectMenu = new javax.swing.JMenuItem();
         changeUsernameMenu = new javax.swing.JMenuItem();
         disconnectMenu = new javax.swing.JMenuItem();
+        exitMenu = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         sendMenu = new javax.swing.JMenuItem();
         clearMenu = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -125,6 +131,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
+        reconnectMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         reconnectMenu.setText("Reconnect");
         reconnectMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,10 +156,19 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         });
         fileMenu.add(disconnectMenu);
 
+        exitMenu.setText("Exit");
+        exitMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exitMenu);
+
         jMenuBar1.add(fileMenu);
 
         editMenu.setText("Edit");
 
+        sendMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.CTRL_MASK));
         sendMenu.setText("Send");
         sendMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,6 +186,18 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         editMenu.add(clearMenu);
 
         jMenuBar1.add(editMenu);
+
+        helpMenu.setText("Help");
+
+        jMenuItem1.setText("About");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        helpMenu.add(jMenuItem1);
+
+        jMenuBar1.add(helpMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -250,6 +278,14 @@ public abstract class ClientGUI extends javax.swing.JFrame {
        userInput.setText(null);
     }//GEN-LAST:event_clearMenuActionPerformed
 
+    private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuActionPerformed
+        exitGUI();
+    }//GEN-LAST:event_exitMenuActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       showHelp();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem changeUsernameMenu;
@@ -258,8 +294,11 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem disconnectMenu;
     private javax.swing.JMenu editMenu;
     private javax.swing.JButton exitButton;
+    private javax.swing.JMenuItem exitMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
