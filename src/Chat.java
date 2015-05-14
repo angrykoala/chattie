@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import gui.ClientGUI;
 
@@ -44,7 +45,7 @@ public class Chat extends ClientGUI implements ClientInterface {
         }
     }
     public void sendMessage(String message) throws RemoteException {
-    	 boolean b=false;
+    	boolean b=false;
         if(logged) b=server.sendMessage(new ChatMessage(this.name,message));
         if(b==false){
         	addText("server rejected message, trying reconnecting");
@@ -135,8 +136,21 @@ public class Chat extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	protected void changeUsernameGUI() {
-		//if(server.changeUsername(String oldUser,String newUser) throws RemoteException;
-		//TODO
+		String newName = JOptionPane.showInputDialog("Please insert your new name");
+		String oldName=this.name;
+		this.name=newName;
+		try {
+			if(server.changeUsername(oldName,newName)){
+				addText("User Changed successfully");
+			}else this.name=oldName;
+		} catch (RemoteException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	@Override
+	protected void showHelpGUI() {
+		JOptionPane.showMessageDialog(null, "Chattie v0.1\nby demiurgosoft\nhttps://github.com/demiurgosoft/chattie");
 	}
 
 }

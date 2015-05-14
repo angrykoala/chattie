@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import gui.LoginGUI;
 
@@ -41,6 +42,12 @@ public class Login extends LoginGUI {
         	return false;
         }
     }
+
+	@Override
+	protected void showHelpGUI() {
+		JOptionPane.showMessageDialog(null, "Chattie v0.1\nby demiurgosoft\nhttps://github.com/demiurgosoft/chattie");
+		
+	}
 
 
 }

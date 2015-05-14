@@ -20,18 +20,18 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         DefaultCaret caret = (DefaultCaret)chatArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        
-        changeUsernameMenu.setEnabled(false);
     }
     //Override for exit action
     protected abstract void exitGUI();
     protected abstract void reconnectGUI();
     protected abstract void changeUsernameGUI();
+    protected abstract void showHelpGUI();
+    protected abstract void sendGUI(String string);
     //Override if want to return instead of simply exit
     protected void returnGUI(){
         exitGUI();
     }
-    protected abstract void sendGUI(String string);
+
     protected void setUsers(ArrayList<String> users,String username){
     	usersList.setText(null);
         for(String user:users){
@@ -52,10 +52,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         userInput.setText(null);
         sendGUI(message);
     }
-    private void showHelp(){
-        
-    }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -283,7 +280,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       showHelp();
+       showHelpGUI();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 

@@ -18,6 +18,7 @@ public abstract class LoginGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
     protected abstract boolean login(String username);
+    protected abstract void showHelpGUI();
     protected void setErrorLabel(String errorMessage){
     	errorLabel.setText(errorMessage);
     }
@@ -28,9 +29,6 @@ public abstract class LoginGUI extends javax.swing.JFrame {
         String username=userInput.getText();
         username=username.trim();
         if(login(username)==true)this.dispose();
-    }
-    private void showHelp(){
-        
     }
 
     /**
@@ -203,7 +201,7 @@ public abstract class LoginGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_clearMenuActionPerformed
 
     private void aboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuActionPerformed
-        showHelp();
+        showHelpGUI();
     }//GEN-LAST:event_aboutMenuActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
