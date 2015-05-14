@@ -14,7 +14,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
 
     public ClientGUI(String username,ImageIcon icon) {
         initComponents();
-        setUsername(username);
+        setGUIUsername(username);
         if(icon!=null) this.setIconImage(icon.getImage());
         setVisible(true);
         setLocationRelativeTo(null);
@@ -43,7 +43,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         if(string!=null && !string.isEmpty())
             chatArea.append(string+"\n");
     }
-    private void setUsername(String username) {
+    protected void setGUIUsername(String username) {
         title.setText(username);
         setTitle("Chattie - "+username);
     }

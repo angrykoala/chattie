@@ -142,10 +142,15 @@ public class Chat extends ClientGUI implements ClientInterface {
 		try {
 			if(server.changeUsername(oldName,newName)){
 				addText("User Changed successfully");
-			}else this.name=oldName;
+				setGUIUsername(newName);
+			}else{
+				this.name=oldName;
+				addText("Couldn't change name");
+			}
 		} catch (RemoteException e) {
-			
-			e.printStackTrace();
+			this.name=oldName;
+			addText("Problem connecting server");
+			//e.printStackTrace();
 		}
 	}
 	@Override
