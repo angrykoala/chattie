@@ -138,6 +138,8 @@ public class Chat extends ClientGUI implements ClientInterface {
 	protected void changeUsernameGUI() {
 		String newName = JOptionPane.showInputDialog("Please insert your new name");
 		String oldName=this.name;
+		newName=newName.trim(); //"trim" username, removing initial and final spaces
+    	newName=newName.replaceAll("\\s", "_"); //changes spaces to dash
 		this.name=newName;
 		try {
 			if(server.changeUsername(oldName,newName)){

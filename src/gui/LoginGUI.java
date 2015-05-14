@@ -27,7 +27,6 @@ public abstract class LoginGUI extends javax.swing.JFrame {
     }
     private void sendLogin() {
         String username=userInput.getText();
-        username=username.trim();
         if(login(username)==true)this.dispose();
     }
 

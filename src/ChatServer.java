@@ -86,15 +86,18 @@ public class ChatServer implements ServerInterface {
     	if(username==null || username.length()<3 || username.length()>15) return false;
     	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
     	else if(username.toLowerCase().contains("server")) return false;
-        else return !isUser(username);
+        else{
+        	String username2=username.toLowerCase();
+        	if(username2.equals(serverName.toLowerCase())) return false;
+        	for(String user:users.keySet()){
+        		if(user.toLowerCase().equals(username2))return false;    		
+        	}
+        	return true;
+        }
     }
-    public boolean isUser(String username){
-    	username=username.toLowerCase();
-    	if(username.equals(serverName.toLowerCase())) return true;
-    	for(String user:users.keySet()){
-    		if(user.toLowerCase().equals(username))return true;    		
-    	}
-    	return false;
+    private boolean isUser(String username){
+    	if(users.containsKey(username)) return true;
+    	else return false;
     }
     
     @Override

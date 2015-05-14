@@ -17,7 +17,6 @@ public class Login extends LoginGUI {
         this.icon=icon;
         this.server=server;
     }
-
     @Override
     protected boolean login(String username) {
     	username=username.trim(); //"trim" username, removing initial and final spaces
