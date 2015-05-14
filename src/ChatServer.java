@@ -85,12 +85,16 @@ public class ChatServer implements ServerInterface {
     	updateUserList();
     	if(username==null || username.length()<3 || username.length()>15) return false;
     	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
-    	else if(username.toLowerCase().contains("server") || username.toLowerCase().equals(serverName.toLowerCase())) return false;
+    	else if(username.toLowerCase().contains("server")) return false;
         else return !isUser(username);
     }
     public boolean isUser(String username){
-    	if(username.toLowerCase().equals(serverName)) return true;
-    	else return users.containsKey(username);
+    	username=username.toLowerCase();
+    	if(username.equals(serverName.toLowerCase())) return true;
+    	for(String user:users.keySet()){
+    		if(user.toLowerCase().equals(username))return true;    		
+    	}
+    	return false;
     }
     
     @Override
