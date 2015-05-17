@@ -198,11 +198,11 @@ public abstract class ChatGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-      this.dispose(); 
+     exitGUI();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-   this.dispose();
+   exitGUI();
     }//GEN-LAST:event_formWindowClosing
 
     private void userInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userInputKeyPressed
@@ -233,7 +233,7 @@ public abstract class ChatGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_sendMenuActionPerformed
 
     private void closeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuActionPerformed
-     this.dispose();
+     exitGUI();
     }//GEN-LAST:event_closeMenuActionPerformed
 
     private void changeNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameMenuActionPerformed

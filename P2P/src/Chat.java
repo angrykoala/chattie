@@ -36,9 +36,8 @@ public class Chat extends ChatGUI{
 		this.partner=partner;
 		setPartnerUsername(partner);
 	}
-	public void closeChat(){
+	private void closeChat(){
 		client.closeChat(this.partner);
-		this.dispose();
 	}
 	public String getPartner(){
 		return this.partner;

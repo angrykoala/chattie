@@ -36,42 +36,51 @@ public class ChatServer implements ServerInterface {
         if(!validUser(username)) return false;
         else if(username==serverName) return false;
         else {
-        //	sendMessage(serverMessage(username+" connected"));
-            users.put(username,client);
-            registry.rebind(username, client);
+            addUser(username,client);
             client.receiveBroadcast(serverMessage("Login Success"));
             updateUserList();
             return true;
         }
     }
-
-/* @Override
-    public boolean sendMessage(ChatMessage message) {
-        if(isUser(message.getAuthor()) && message.isValid()) {
-            for(String username : users.keySet()) {
-                if(username!=null){
-					try {
-						users.get(username).getMessage(message);
-					} catch (RemoteException e) {
-						kick(username);
-					}
-            }
-            }
-            return true;
+    private void addUser(String username,ClientInterface client) throws AccessException, RemoteException{
+    	users.put(username,client);
+        registry.rebind(username, client);
+        client.updateUsers(users);
+        for(String user : users.keySet()) {
+            if(user!=null)
+				try {
+					users.get(user).addUser(username, client);
+				} catch (RemoteException e) {
+					kick(user);
+				}
         }
-        else{
-        	if(isUser(message.getAuthor())) return true;
-        	else return false;
-        }
-    }*/
+    }
+            
+    private void deleteUser(String username){
+    	try {
+			registry.unbind(username);
+		} catch (RemoteException | NotBoundException e) {
+			System.out.println("Error unbinding username");
+		}
+    	if(users.remove(username)!=null){
+    		for(String user : users.keySet()) {
+                if(user!=null)
+    				try {
+    					users.get(user).deleteUser(username);
+    				} catch (RemoteException e) {
+    					kick(user); //don't break
+    				}	
+    		} 	
+    	}
+    }
     private void updateUserList() {
-    	ArrayList<String> usersList=getUsers();
         for(String username : users.keySet()) {
             if(username!=null){
 				try {
 					users.get(username).updateUsers(users);
 				} catch (RemoteException e) {
 					kick(username);
+					updateUserList(); //restart update user list
 					break;
 				}
         }
@@ -97,8 +106,8 @@ public class ChatServer implements ServerInterface {
     public void disconnect(String username) throws RemoteException, NotBoundException {
         if(isUser(username)) {
             ClientInterface client=getUser(username);
-            client.receiveMessage(serverMessage("You have been logged out"));
-            removeUser(username);
+            client.receiveBroadcast(serverMessage("You have been logged out"));
+            deleteUser(username);
             System.out.println(username+" disconnected");
         //    sendMessage(serverMessage(username+" disconnected"));
         }
@@ -124,7 +133,6 @@ public class ChatServer implements ServerInterface {
           //  sendMessage(serverMessage(oldUser+" change name to" + newUser));
             users.put(newUser,user);
             updateUserList();
-            
             return true;
         }
         else return false;
@@ -138,12 +146,9 @@ public class ChatServer implements ServerInterface {
 			} catch (RemoteException e) {
 				//System.out.println();
 			}
-             removeUser(username);
+             deleteUser(username);
              System.out.println(username+" kicked out");
-          //   sendMessage(serverMessage("user "+username+" was kicked"));
-         }
-    	 updateUserList();
-    	
+         }   	
     }
     private void shutdown() throws RemoteException, NotBoundException{
     //	sendMessage(serverMessage("server si shutting down"));
@@ -158,15 +163,7 @@ public class ChatServer implements ServerInterface {
             System.out.println("error unexporting");
         }
     }
-    private void removeUser(String username){
-        try {
-			registry.unbind(username);
-		} catch (RemoteException | NotBoundException e) {
-			System.out.println("Error unbinding username");
-		}
-        users.remove(username);
-		updateUserList();
-    }
+
     public static void main(String[] args) {
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());

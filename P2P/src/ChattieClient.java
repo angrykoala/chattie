@@ -116,12 +116,12 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		for(ClientInterface client : users.values()){
 			try {
 				client.receiveBroadcast(msg);
-				this.receiveBroadcast(msg);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 			}
 		}
+		addText(msg.getMessage());
 	}
 	public static ServerInterface connectToServer() throws RemoteException, NotBoundException{
 		Registry registry;
@@ -156,8 +156,10 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	public void addUser(String username,ClientInterface stub) throws RemoteException {
-		this.users.put(username,stub);
+		if(username!=name){
+			this.users.put(username,stub);
 		updateUsersList();		
+		}
 	}
 	@Override
 	public void deleteUser(String username) throws RemoteException {
@@ -224,7 +226,6 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	protected void startChatGUI(String username){
-		System.out.println("Start chat");
 		startChat(username);
 	}
 	
@@ -239,15 +240,17 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 			}
 		else return null;
 		}
-/*	private boolean isChat(String partner){
-		return activeChats.containsKey(partner);
-	} */
 	private Chat getChat(String partner){
 		return activeChats.get(partner);
-
 	}
 	public void closeChat(String partner) {
-		activeChats.remove(partner);		
+		Chat c=activeChats.remove(partner);	
+		if(c!=null)	c.dispose();
+	}
+	private void closeAllChats(){
+		for(String partner:activeChats.keySet()){
+			closeChat(partner);			
+		}
 	}
 	  public static void main(String args[]) {
 	        ChattieClient.serverHost=args[0];
