@@ -69,7 +69,7 @@ public class ChatServer implements ServerInterface {
         for(String username : users.keySet()) {
             if(username!=null){
 				try {
-					users.get(username).updateUsers(usersList);
+					users.get(username).updateUsers(users);
 				} catch (RemoteException e) {
 					kick(username);
 					break;

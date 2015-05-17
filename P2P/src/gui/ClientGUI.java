@@ -28,7 +28,8 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     protected abstract void changeUsernameGUI();
     protected abstract void sendGUI(String string);
     protected abstract void showHelpGUI();
-    protected abstract void startChat(String username);
+    protected abstract void startChatGUI(String username);
+    
     protected void setUsers(String[] users){
       userList.setListData(users);
     }
@@ -310,7 +311,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
 
     private void startChatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startChatButtonActionPerformed
       String selectedUser=(String) userList.getSelectedValue();
-      startChat(selectedUser);
+      startChatGUI(selectedUser);
     }//GEN-LAST:event_startChatButtonActionPerformed
 
 

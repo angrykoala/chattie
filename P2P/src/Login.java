@@ -32,7 +32,7 @@ public class Login extends LoginGUI {
             return false;
         }
         if(validUser==true) {
-            //ChattieClient.client=new ChattieClient(username,server);
+            ChattieClient.client=new ChattieClient(username,server,icon);
             return true;
         }
         else{

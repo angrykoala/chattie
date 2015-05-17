@@ -31,7 +31,8 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	private ServerInterface server=null;
 	
 	private HashMap<String,ClientInterface> users=new HashMap<String,ClientInterface>();
-	private ArrayList<Chat> activeChats=new ArrayList<Chat>(); //Use hashmap??
+	private HashMap<String,Chat> activeChats=new HashMap<String,Chat>();
+	
 	private boolean logged=false;
 	public ChattieClient(String name,ServerInterface server,ImageIcon icon){
 		super(name,icon);
@@ -71,8 +72,17 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
     	 setUsers(users.keySet().toArray(new String[users.size()]));
     }
 	public void sendMessage(String to,ChatMessage message){
-		//TODO
-		
+		ClientInterface stub=users.get(to);
+		if(stub!=null){
+			try {
+				stub.receiveMessage(message);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.println("Problem sending message");
+			}
+		}
+		System.out.println("Problem sending message");		
 	}
 	//reconnects to server
 	public void reconnect(){
@@ -99,7 +109,14 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	public void sendBroadcast(String message){
 		ChatMessage msg=new ChatMessage(this.name,message);
-		//send to everybody!!
+		for(ClientInterface client : users.values()){
+			try {
+				client.receiveMessage(msg);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
 	}
 	public static ServerInterface connectToServer() throws RemoteException, NotBoundException{
 		Registry registry;
@@ -109,24 +126,16 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
         return server;
 	}
 	
-    public static void main(String args[]) {
-        ChattieClient.serverHost=args[0];
-        icon = new ImageIcon(iconName,"Chattie client icon");
-        if(System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-        try {
-            ServerInterface server=connectToServer();
-            new Login(server,icon);
-        }
-        catch(RemoteException | NotBoundException e1) {
-            System.out.println("Couldn't connect to server");
-        }
-    }
+  
     //RMI METHODS
 	@Override
 	public void receiveMessage(ChatMessage message) throws RemoteException {
-		// TODO Auto-generated method stub
+		String partner=message.getAuthor();
+		Chat chat=startChat(partner);
+		if(chat!=null) chat.receiveMessage(message);
+		else{
+			System.out.println("Error message recieving");
+		}
 		
 	}
 	@Override
@@ -208,149 +217,40 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		
 	}
 	@Override
-	protected void startChat(String username) {
-		// TODO Auto-generated method stub
-		
-	}
-
-}
-
-/* old chat
- * 
- *     private String name=null;
-    private ServerInterface server=null;
-    private boolean logged=false;
-    private ImageIcon icon;
-
-    public Chat(String clientName,ServerInterface server,ImageIcon icon)  {
-        super(clientName,icon);
-        this.name=clientName;
-        this.server=server;
-        this.icon=icon;
-        try {
-			login();
-		} catch (RemoteException e) {
-			System.out.println("Error login in");
-			returnLogin();
-			
-		}
-    }
-    private void login() throws RemoteException {
-        ClientInterface stub=(ClientInterface) UnicastRemoteObject.exportObject((ClientInterface) this,0);
-        if(server.login(name,stub)) logged=true;
-        else {
-            logged=false;
-            unexportStub();
-            returnLogin();
-        }
-    }
-    public void sendMessage(String message,String toUser) throws RemoteException {
-    	 boolean b=false;
-       // if(logged) b=server.sendMessage(new ChatMessage(this.name,message));
-        if(b==false){
-        	addText("server rejected message, trying reconnecting");
-        	reconnectGUI();	
-        }
-    }
-    public void broadcastMessage(String message){
-    	//send message to everyone :D
-    }
-    public boolean isLogged() {
-        return logged;
-    }
-    public void disconnect() throws RemoteException, NotBoundException {
-        if(logged) {
-            server.disconnect(name);
-            unexportStub();
-            logged=false;
-        }
-    }
-    private void returnLogin() {
-        this.dispose();
-        new Login(server,icon);
-    }
-    @Override
-    public void receiveMessage(ChatMessage message) throws RemoteException {
-        addText(message.getMessage());
-    }
-    @Override
-    public void kick() throws RemoteException {
-       if(logged){
-    	logged=false;
-        unexportStub();
-        addText("You have been kicked from server");
-       }
-    }
-    @Override
-	public void updateUsers(ArrayList<String> users) throws RemoteException {
-		setUsers(users,this.name);		
-	}
-    private void unexportStub() {
-        try {
-            UnicastRemoteObject.unexportObject(this,true);
-        }
-        catch(NoSuchObjectException e) {
-            System.out.println("error unexporting");
-        }
-    }
-    @Override
-    protected void exitGUI() {
-        try {
-            disconnect();
-        }
-        catch(RemoteException | NotBoundException e) {
-            
-        }
-        this.dispose();
-    }
-    @Override
-    protected void returnGUI(){
-    	try {
-			disconnect();
-		} catch (RemoteException | NotBoundException e) {
-			
-		}
-    	returnLogin();
-    	
-    }
-    @Override
-    protected void sendGUI(String string) {
-        try {
-            sendMessage(string);
-        }
-        catch(RemoteException e) {
-            addText("Message couldn't be sent, trying to reconnect");
-            reconnectGUI();
-            
-        }
-    }
-	@Override
-	protected void reconnectGUI() {
-		try {
-			disconnect();
-		} catch (RemoteException | NotBoundException e1) {
-		}
-		try {
-			this.server=ChattieClient.connectToServer();
-			login();
-		} catch (RemoteException | NotBoundException e) {
-			addText("Problem Connecting to server");
-		}
-	}
-	@Override
-	protected void changeUsernameGUI() {
-		//if(server.changeUsername(String oldUser,String newUser) throws RemoteException;
-		//TODO
-	}
-	@Override
-	public void addUser(String username) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void deleteUser(String username) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	protected void startChatGUI(String username){
+		startChat(username);
 	}
 	
-	*/
+	private Chat startChat(String username) {
+		if(users.containsKey(username)){
+			Chat chat=getChat(username);
+			if(chat==null){
+				chat=new Chat(this.name,username,this);
+				activeChats.put(username,chat);
+				return chat;
+			}else return chat;
+			}
+		else return null;
+		}
+	private boolean isChat(String partner){
+		return activeChats.containsKey(partner);
+	}
+	private Chat getChat(String partner){
+		return activeChats.get(partner);
+
+	}
+	  public static void main(String args[]) {
+	        ChattieClient.serverHost=args[0];
+	        icon = new ImageIcon(iconName,"Chattie client icon");
+	        if(System.getSecurityManager() == null) {
+	            System.setSecurityManager(new SecurityManager());
+	        }
+	        try {
+	            ServerInterface server=connectToServer();
+	            new Login(server,icon);
+	        }
+	        catch(RemoteException | NotBoundException e1) {
+	            System.out.println("Couldn't connect to server");
+	        }
+	    }
+}

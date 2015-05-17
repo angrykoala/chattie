@@ -38,6 +38,12 @@ public class Chat extends ChatGUI{
 	public void closeChat(){
 		this.dispose();
 	}
+	public String getPartner(){
+		return this.partner;
+	}
+	public void receiveMessage(ChatMessage msg){
+		addText(msg.getMessage());
+	}
 	@Override
 	protected void sendGUI(String content) {
 		client.sendMessage(partner,new ChatMessage(this.name,content));
