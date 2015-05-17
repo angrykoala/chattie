@@ -39,7 +39,7 @@ public class ChatServer implements ServerInterface {
         //	sendMessage(serverMessage(username+" connected"));
             users.put(username,client);
             registry.rebind(username, client);
-            client.receiveMessage(serverMessage("Login Success"));
+            client.receiveBroadcast(serverMessage("Login Success"));
             updateUserList();
             return true;
         }

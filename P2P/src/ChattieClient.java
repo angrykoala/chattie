@@ -71,18 +71,22 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
     private void updateUsersList(){
     	 setUsers(users.keySet().toArray(new String[users.size()]));
     }
-	public void sendMessage(String to,ChatMessage message){
+	public boolean sendMessage(String to,ChatMessage message){
 		ClientInterface stub=users.get(to);
+		Chat chat=activeChats.get(to);
 		if(stub!=null){
 			try {
-				stub.receiveMessage(message);
+				stub.receiveMessage(message);	
+				return true;
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				System.out.println("Problem sending message");
+				return false;
 			}
 		}
-		System.out.println("Problem sending message");		
+		System.out.println("Problem sending message");	
+		return false;
 	}
 	//reconnects to server
 	public void reconnect(){
@@ -111,7 +115,8 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		ChatMessage msg=new ChatMessage(this.name,message);
 		for(ClientInterface client : users.values()){
 			try {
-				client.receiveMessage(msg);
+				client.receiveBroadcast(msg);
+				this.receiveBroadcast(msg);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
@@ -139,8 +144,13 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		
 	}
 	@Override
+	public void receiveBroadcast(ChatMessage message) throws RemoteException {
+		addText(message.getMessage());
+	}
+	@Override
 	public void updateUsers(HashMap<String,ClientInterface> users) throws RemoteException {
 		this.users=users;
+		users.remove(this.name);
 		updateUsersList();
 		//check active chats?
 	}
@@ -161,11 +171,7 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void receiveBroadcast(ChatMessage message) throws RemoteException {
-		addText(message.getMessage());
-		
-	}
+
 	//GUI METHODS
 	@Override
 	protected void exitGUI() {
@@ -218,6 +224,7 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	protected void startChatGUI(String username){
+		System.out.println("Start chat");
 		startChat(username);
 	}
 	
@@ -232,12 +239,15 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 			}
 		else return null;
 		}
-	private boolean isChat(String partner){
+/*	private boolean isChat(String partner){
 		return activeChats.containsKey(partner);
-	}
+	} */
 	private Chat getChat(String partner){
 		return activeChats.get(partner);
 
+	}
+	public void closeChat(String partner) {
+		activeChats.remove(partner);		
 	}
 	  public static void main(String args[]) {
 	        ChattieClient.serverHost=args[0];
@@ -253,4 +263,5 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	            System.out.println("Couldn't connect to server");
 	        }
 	    }
+
 }

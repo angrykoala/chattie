@@ -27,6 +27,7 @@ public class Chat extends ChatGUI{
 		changeUsername(user);
 		updatePartner(partner);
 		this.client=client;
+		this.setVisible(true);
 	}
 	public void changeUsername(String name){
 		this.name=name;
@@ -36,6 +37,7 @@ public class Chat extends ChatGUI{
 		setPartnerUsername(partner);
 	}
 	public void closeChat(){
+		client.closeChat(this.partner);
 		this.dispose();
 	}
 	public String getPartner(){
@@ -46,7 +48,9 @@ public class Chat extends ChatGUI{
 	}
 	@Override
 	protected void sendGUI(String content) {
-		client.sendMessage(partner,new ChatMessage(this.name,content));
+		ChatMessage msg=new ChatMessage(this.name,content);
+		if(client.sendMessage(partner,msg)) addText(msg.getMessage());
+		else addText("Problem sending message");
 	}
 	@Override
 	protected void exitGUI() {
