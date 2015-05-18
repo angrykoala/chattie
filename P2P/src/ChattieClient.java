@@ -1,13 +1,11 @@
 import gui.ClientGUI;
 
-import java.rmi.AccessException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -102,13 +100,19 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 		}
 		
 	}
-	//reconnects to given partner (if possible)
-	public void reconnect(String partner){
-		//TODO
-		
-	}
 	public void changeUsername(String newUser){
-		//TODO
+		try {
+			if(server.changeUsername(this.name, newUser)){
+				this.name=newUser;
+				for(Chat chat:activeChats.values()){
+					chat.changeUsername(this.name);
+				}
+				
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	public void sendBroadcast(String message){
@@ -170,7 +174,9 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	public void kick() throws RemoteException {
-		// TODO Auto-generated method stub
+		 unexportStub();
+        // returnLogin();
+         logged=false;
 		
 	}
 

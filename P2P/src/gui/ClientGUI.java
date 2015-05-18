@@ -1,9 +1,8 @@
 package gui;
 
 import static java.awt.event.KeyEvent.VK_ENTER;
-import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.ImageIcon;
+import javax.swing.JList;
 import javax.swing.text.DefaultCaret;
 
 /* NAME: ClientGUI
@@ -77,7 +76,7 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         chatArea = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        userList = new javax.swing.JList();
+        userList = new JList<String>();
         startChatButton = new javax.swing.JButton();
         publicChatLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -337,6 +336,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton startChatButton;
     private javax.swing.JLabel title;
     private javax.swing.JTextArea userInput;
-    private javax.swing.JList userList;
+    private javax.swing.JList<String> userList;
     // End of variables declaration//GEN-END:variables
 }

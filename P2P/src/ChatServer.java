@@ -151,7 +151,6 @@ public class ChatServer implements ServerInterface {
          }   	
     }
     private void shutdown() throws RemoteException, NotBoundException{
-    //	sendMessage(serverMessage("server si shutting down"));
     	for(String user : users.keySet()) {
             kick(user);
         }

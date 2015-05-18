@@ -1,16 +1,7 @@
-
-import java.rmi.NoSuchObjectException;
-
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import gui.ChatGUI;
-import gui.ClientGUI;
 
 /* NAME: Chat
  * PROJECT: Chattie - https://github.com/demiurgosoft/chattie
@@ -28,6 +19,7 @@ public class Chat extends ChatGUI{
 		updatePartner(partner);
 		this.client=client;
 		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	public void changeUsername(String name){
 		this.name=name;
@@ -58,7 +50,7 @@ public class Chat extends ChatGUI{
 	}
 	@Override
 	protected void reconnectGUI() {
-		client.reconnect(partner);
+		client.reconnect();
 		
 	}
 	@Override
