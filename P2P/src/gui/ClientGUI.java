@@ -24,7 +24,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     //Override for exit action
     protected abstract void exitGUI();
     protected abstract void reconnectGUI();
-    protected abstract void changeUsernameGUI();
     protected abstract void sendGUI(String string);
     protected abstract void showHelpGUI();
     protected abstract void startChatGUI(String username);
@@ -76,13 +75,12 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         chatArea = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        userList = new JList<String>();
+        userList = new javax.swing.JList();
         startChatButton = new javax.swing.JButton();
         publicChatLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         reconnectMenu = new javax.swing.JMenuItem();
-        changeUsernameMenu = new javax.swing.JMenuItem();
         disconnectMenu = new javax.swing.JMenuItem();
         exitMenu = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
@@ -149,14 +147,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
             }
         });
         fileMenu.add(reconnectMenu);
-
-        changeUsernameMenu.setText("Change username");
-        changeUsernameMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeUsernameMenuActionPerformed(evt);
-            }
-        });
-        fileMenu.add(changeUsernameMenu);
 
         disconnectMenu.setText("Disconnect");
         disconnectMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -284,10 +274,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
         reconnectGUI();
     }//GEN-LAST:event_reconnectMenuActionPerformed
 
-    private void changeUsernameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUsernameMenuActionPerformed
-        changeUsernameGUI();
-    }//GEN-LAST:event_changeUsernameMenuActionPerformed
-
     private void disconnectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectMenuActionPerformed
        returnGUI();
     }//GEN-LAST:event_disconnectMenuActionPerformed
@@ -315,7 +301,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem changeUsernameMenu;
     private javax.swing.JTextArea chatArea;
     private javax.swing.JMenuItem clearMenu;
     private javax.swing.JMenuItem disconnectMenu;
@@ -336,6 +321,6 @@ public abstract class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton startChatButton;
     private javax.swing.JLabel title;
     private javax.swing.JTextArea userInput;
-    private javax.swing.JList<String> userList;
+    private javax.swing.JList userList;
     // End of variables declaration//GEN-END:variables
 }

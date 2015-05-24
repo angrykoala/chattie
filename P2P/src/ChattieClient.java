@@ -56,6 +56,7 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
         }
     }
     private void returnLogin() {
+    	closeAllChats();
         this.dispose();
         new Login(server,icon);
     }
@@ -77,13 +78,11 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 				stub.receiveMessage(message);	
 				return true;
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
 				System.out.println("Problem sending message");
 				return false;
 			}
 		}
-		System.out.println("Problem sending message");	
+		System.out.println("Problem sending message (stub not found)");	
 		return false;
 	}
 	//reconnects to server
@@ -97,21 +96,6 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 			login();
 		} catch (RemoteException | NotBoundException e) {
 			addText("Problem Connecting to server");
-		}
-		
-	}
-	public void changeUsername(String newUser){
-		try {
-			if(server.changeUsername(this.name, newUser)){
-				this.name=newUser;
-				for(Chat chat:activeChats.values()){
-					chat.changeUsername(this.name);
-				}
-				
-			}
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 	}
@@ -160,7 +144,7 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	}
 	@Override
 	public void addUser(String username,ClientInterface stub) throws RemoteException {
-		if(username!=name){
+		if(!username.equals(name)){
 			this.users.put(username,stub);
 		updateUsersList();		
 		}
@@ -211,14 +195,6 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	@Override
 	protected void reconnectGUI() {
 		reconnect();		
-	}
-	@Override
-	protected void changeUsernameGUI() {
-		String newName = JOptionPane.showInputDialog("Please insert your new name");
-		newName=newName.trim(); //"trim" username, removing initial and final spaces
-    	newName=newName.replaceAll("\\s", "_"); //changes spaces to dash
-		changeUsername(newName);
-		
 	}
 	@Override
 	protected void sendGUI(String string) {

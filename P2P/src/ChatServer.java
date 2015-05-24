@@ -21,7 +21,6 @@ public class ChatServer implements ServerInterface {
         super();
         this.serverName=serverName;
         try {
-            //this.registry=LocateRegistry.createRegistry(1099); //to create registry
             this.registry=LocateRegistry.getRegistry();
             bindServer();
         }
@@ -32,22 +31,39 @@ public class ChatServer implements ServerInterface {
 
     @Override
     public boolean login(String username,ClientInterface client) throws RemoteException {
-        System.out.println(username+" connected");
         if(!validUser(username)) return false;
         else if(username==serverName) return false;
         else {
             addUser(username,client);
             client.receiveBroadcast(serverMessage("Login Success"));
-            updateUserList();
+            System.out.println(username+" connected");
+           // updateUserList();
             return true;
         }
     }
+    @Override
+    public void disconnect(String username) throws RemoteException, NotBoundException {
+        if(isUser(username)) {
+            ClientInterface client=getUser(username);
+            client.receiveBroadcast(serverMessage("You have been logged out"));
+            deleteUser(username);
+            System.out.println(username+" disconnected");
+        }
+    }
+    
+    @Override
+    public boolean validUser(String username) throws RemoteException {
+    	updateUserList();
+    	if(username==null || username.length()<3 || username.length()>15) return false;
+    	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
+    	else if(username.toLowerCase().contains("server") || username.toLowerCase().equals(serverName.toLowerCase())) return false;
+        else return !isUser(username);
+    }
     private void addUser(String username,ClientInterface client) throws AccessException, RemoteException{
-    	users.put(username,client);
         registry.rebind(username, client);
+    	users.put(username,client);
         client.updateUsers(users);
         for(String user : users.keySet()) {
-            if(user!=null)
 				try {
 					users.get(user).addUser(username, client);
 				} catch (RemoteException e) {
@@ -90,28 +106,13 @@ public class ChatServer implements ServerInterface {
     private ClientInterface getUser(String username) {
         return users.get(username);
     }
-    public boolean validUser(String username) throws RemoteException {
-    	updateUserList();
-    	if(username==null || username.length()<3 || username.length()>15) return false;
-    	else if (username.contains(" ") || username.contains(System.getProperty("line.separator"))) return false;
-    	else if(username.toLowerCase().contains("server") || username.toLowerCase().equals(serverName.toLowerCase())) return false;
-        else return !isUser(username);
-    }
+
     public boolean isUser(String username){
     	if(username.toLowerCase().equals(serverName)) return true;
     	else return users.containsKey(username);
     }
     
-    @Override
-    public void disconnect(String username) throws RemoteException, NotBoundException {
-        if(isUser(username)) {
-            ClientInterface client=getUser(username);
-            client.receiveBroadcast(serverMessage("You have been logged out"));
-            deleteUser(username);
-            System.out.println(username+" disconnected");
-        //    sendMessage(serverMessage(username+" disconnected"));
-        }
-    }
+
 
     private void bindServer() throws RemoteException {
         ServerInterface stub=(ServerInterface) UnicastRemoteObject.exportObject((ServerInterface) this,0);
@@ -125,18 +126,7 @@ public class ChatServer implements ServerInterface {
     	return new ArrayList<String>(users.keySet());
     }
 
-    @Override
-    public boolean changeUsername(String oldUser, String newUser) throws RemoteException {
-        if(isUser(oldUser) && validUser(newUser)) {
-            ClientInterface user=getUser(oldUser);
-            users.remove(oldUser);
-          //  sendMessage(serverMessage(oldUser+" change name to" + newUser));
-            users.put(newUser,user);
-            updateUserList();
-            return true;
-        }
-        else return false;
-    }
+
     private void kick(String username) {
     	 if(isUser(username)) {
              ClientInterface client=getUser(username);

@@ -20,14 +20,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reconnectMenuActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="changeUsernameMenu">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Change username"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeUsernameMenuActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="disconnectMenu">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Disconnect"/>

@@ -14,19 +14,15 @@ public class Chat extends ChatGUI{
 	ChattieClient client;
 	
 	public Chat(String user,String partner,ChattieClient client){
-		super();
+		super(partner);
+		this.partner=partner;
 		changeUsername(user);
-		updatePartner(partner);
 		this.client=client;
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	public void changeUsername(String name){
 		this.name=name;
-	}
-	public void updatePartner(String partner){
-		this.partner=partner;
-		setPartnerUsername(partner);
 	}
 	private void closeChat(){
 		client.closeChat(this.partner);
@@ -53,13 +49,6 @@ public class Chat extends ChatGUI{
 		client.reconnect();
 		
 	}
-	@Override
-	protected void changeUsernameGUI() {
-		String newName = JOptionPane.showInputDialog("Please insert your new name");
-		newName=newName.trim(); //"trim" username, removing initial and final spaces
-    	newName=newName.replaceAll("\\s", "_"); //changes spaces to dash
-		client.changeUsername(newName);
-		}
 		
 	@Override
 	protected void showHelpGUI() {

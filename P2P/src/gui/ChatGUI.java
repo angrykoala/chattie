@@ -10,14 +10,13 @@ import static java.awt.event.KeyEvent.VK_ENTER;
 
 public abstract class ChatGUI extends javax.swing.JFrame {
     
-    public ChatGUI() {
+    public ChatGUI(String partner) {
         initComponents();
-      //  setPartnerUsername(partner);
+        setPartnerUsername(partner);
     }
     protected abstract void sendGUI(String string);
     protected abstract void exitGUI();
     protected abstract void reconnectGUI();
-    protected abstract void changeUsernameGUI();
     protected abstract void showHelpGUI();
     
     
@@ -32,7 +31,7 @@ public abstract class ChatGUI extends javax.swing.JFrame {
        sendGUI(text);
     }
 
-    protected void setPartnerUsername(String username) {
+    private void setPartnerUsername(String username) {
         titleLabel.setText(username);
         setTitle("Chattie - "+username);
     }
@@ -51,7 +50,6 @@ public abstract class ChatGUI extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         reconnectMenu = new javax.swing.JMenuItem();
-        changeNameMenu = new javax.swing.JMenuItem();
         closeMenu = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         sendMenu = new javax.swing.JMenuItem();
@@ -106,14 +104,6 @@ public abstract class ChatGUI extends javax.swing.JFrame {
             }
         });
         fileMenu.add(reconnectMenu);
-
-        changeNameMenu.setText("Change Name");
-        changeNameMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeNameMenuActionPerformed(evt);
-            }
-        });
-        fileMenu.add(changeNameMenu);
 
         closeMenu.setText("Close");
         closeMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -236,13 +226,8 @@ public abstract class ChatGUI extends javax.swing.JFrame {
      exitGUI();
     }//GEN-LAST:event_closeMenuActionPerformed
 
-    private void changeNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameMenuActionPerformed
-      changeUsernameGUI();
-    }//GEN-LAST:event_changeNameMenuActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenu;
-    private javax.swing.JMenuItem changeNameMenu;
     private javax.swing.JTextArea chatArea;
     private javax.swing.JMenuItem clearMenu;
     private javax.swing.JButton closeButton;
