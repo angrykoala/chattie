@@ -160,5 +160,11 @@ public class ChatServer implements ServerInterface {
         new ChatServer("Chattie_Server");
     }
 
+	@Override
+	public void ping() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

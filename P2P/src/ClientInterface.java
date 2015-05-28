@@ -14,4 +14,5 @@ public interface ClientInterface extends Remote {
     public void addUser(String username,ClientInterface stub) throws RemoteException;
     public void deleteUser(String username) throws RemoteException;
     public void kick() throws RemoteException;
+    public void ping() throws RemoteException;
 }

@@ -159,5 +159,9 @@ public class Chat extends ClientGUI implements ClientInterface {
 	protected void showHelpGUI() {
 		JOptionPane.showMessageDialog(null, "Chattie v0.1\nby demiurgosoft\nhttps://github.com/demiurgosoft/chattie");
 	}
+	@Override
+	public void ping() throws RemoteException {
+		//ping method to be called
+	}
 
 }

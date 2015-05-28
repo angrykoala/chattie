@@ -11,4 +11,5 @@ public interface ServerInterface extends Remote {
     public boolean login(String username,ClientInterface stub) throws RemoteException;
     public boolean validUser(String username) throws RemoteException;
     public void disconnect(String username) throws RemoteException, NotBoundException;
+    public void ping() throws RemoteException;
 }

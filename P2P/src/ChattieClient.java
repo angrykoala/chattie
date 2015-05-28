@@ -248,5 +248,10 @@ public class ChattieClient extends ClientGUI implements ClientInterface {
 	            System.out.println("Couldn't connect to server");
 	        }
 	    }
+	@Override
+	public void ping() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
