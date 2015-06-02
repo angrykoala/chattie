@@ -4,7 +4,12 @@ _by @demiurgosoft_
 [Chattie is in GitHub](https://github.com/demiurgosoft/chattie)    
 Java application to deploy a simple chatting client-server easily using Java-rmi
 
+##Versions
+* **Server-client:** Simple server-client chat irc-style for common chat between clients
+* **P2P:** Peer to peer version, with server to sync contacts, alowing "IRC" based chat and one-to-one chat
+
 ##Instructions
+These instructions are common to both versions
 1. Run `make` to compile both, Chattie server and client (will be placed under classes/ directory temporaly
 	* Run `make client` to only compile client
 	* Run `make server` to only compile server
@@ -38,8 +43,6 @@ In case that Chattie is not working (Server or Client side) try some of the poss
 * _Some actions are disabled or can't be accessed_: Chattie is still under development, there are a lot of features not implemented yet, or not fully functional
 
 -----------------------
-
-_Currently, only direct connection is supported with basic All to All chat_
 
 >Chattie has been tested on **Linux** (Debian), **Mac** (IOS) and **Raspberry pi** (Raspbian)
 
